@@ -21,8 +21,15 @@
   assign form_style = localization_font | append: localization_font_size | append: color_shadow
 %}
 
+{% liquid
+  assign mobile_visibility_class = 'mobile:hidden'
+  if mobile_only == true
+    assign mobile_visibility_class = ''
+  endif
+%}
+
 {% if show_language and show_country == false %}
-  <div class="dropdown-localization mobile:hidden">
+  <div class="dropdown-localization {{ mobile_visibility_class }}">
     {% render 'localization-form',
       show_country: show_country,
       show_language: show_language,
@@ -33,7 +40,7 @@
   </div>
 {% elsif show_country %}
   <dropdown-localization-component
-    class="dropdown-localization mobile:hidden"
+    class="dropdown-localization {{ mobile_visibility_class }}"
   >
     <button
       type="button"

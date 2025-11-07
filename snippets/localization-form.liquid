@@ -816,4 +816,33 @@
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
   }
+
+  /* Mobile localization in header-actions */
+  @media screen and (max-width: 749px) {
+    .header-actions__mobile-localization .dropdown-localization__button {
+      height: var(--button-size);
+      width: auto;
+      min-width: var(--button-size);
+      padding-inline: var(--padding-xs);
+      margin-inline: 0;
+      font-size: var(--font-size-sm);
+    }
+
+    .header-actions__mobile-localization .dropdown-localization__button .icon-flag {
+      width: var(--icon-size-sm);
+      height: var(--icon-size-sm);
+      margin-inline-end: 2px;
+    }
+
+    .header-actions__mobile-localization .dropdown-localization__button .icon-caret {
+      width: var(--icon-size-xs);
+      height: var(--icon-size-xs);
+    }
+
+    .header-actions__mobile-localization .localization-wrapper {
+      right: 0;
+      left: auto;
+      min-width: 280px;
+    }
+  }
 {% endstylesheet %}

@@ -7,6 +7,31 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
+  {%- comment -%} Mobile language selector - show to left of account button on mobile only {%- endcomment -%}
+  {% liquid
+    assign show_language_mobile = section.settings.show_language
+    if localization.available_languages.size <= 1
+      assign show_language_mobile = false
+    endif
+
+    assign show_country_mobile = section.settings.show_country
+    if localization.available_countries.size <= 1
+      assign show_country_mobile = false
+    endif
+  %}
+
+  {% if show_country_mobile or show_language_mobile %}
+    <div class="header-actions__mobile-localization desktop:hidden">
+      {% render 'dropdown-localization',
+        show_country: show_country_mobile,
+        show_language: show_language_mobile,
+        country_style: section.settings.country_selector_style,
+        localization_position: 'right',
+        mobile_only: true
+      %}
+    </div>
+  {% endif %}
+
   {% if shop.customer_accounts_enabled %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
@@ -192,10 +217,22 @@
 
   header-actions {
     display: flex;
+    align-items: center;
+    gap: 0;
 
     @media screen and (max-width: 749px) {
       justify-self: flex-end;
     }
+  }
+
+  .header-actions__mobile-localization {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-actions__mobile-localization .dropdown-localization__button {
+    padding-inline: var(--padding-xs);
+    margin-inline: 0;
   }
 
   .header__column--right header-actions {
