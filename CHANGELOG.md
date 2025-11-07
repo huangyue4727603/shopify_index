@@ -4,6 +4,32 @@
 
 ---
 
+## 2025-01-07 - 迁移仓库到 GitHub
+
+**Git 操作:** 仓库迁移
+
+### 变更说明
+
+- **原仓库:** Gitee - `https://gitee.com/jhxx_1_huangyue/shopify_index`
+- **新仓库:** GitHub - `https://github.com/huangyue4727603/shopify_index`
+- **认证方式:** SSH (git@github.com)
+
+### 操作步骤
+
+1. 更新 Git 远程仓库地址为 GitHub
+2. 配置 SSH 密钥认证
+3. 推送所有代码和提交历史到 GitHub
+4. 保持完整的提交记录（3 个提交）
+
+### 仓库状态
+
+- ✅ 所有文件已同步
+- ✅ 提交历史完整保留
+- ✅ CHANGELOG.md 已更新
+- ✅ 使用 SSH 方式进行认证，安全可靠
+
+---
+
 ## 2025-01-07 - 添加移动端语言选择器
 
 **提交 ID:** `c8436a8`
