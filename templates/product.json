@@ -515,6 +515,58 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "text_wNTReT": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h3>文化能量：身份认同与自我表达</h3>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h3",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_X4WDtw": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<p>凤求凰故事蕴含对传统文化的深度诠释，美甲中的云纹、流苏等细节，能强化佩戴者的文化归属感。在重要场合佩戴以凤凰为主题的美甲，不仅是对东方美学的致敬，更能通过指尖艺术传递 “我是谁” 的身份认同，既展现女性的优雅，又暗含 “凤舞九天” 的野心，帮助佩戴者在人群中脱颖而出💪</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -524,7 +576,9 @@
         "text_Pmaa3E",
         "image_bEgUPz",
         "text_NNyC3J",
-        "text_biCNRL"
+        "text_biCNRL",
+        "text_wNTReT",
+        "text_X4WDtw"
       ],
       "name": "t:names.image_with_text",
       "settings": {
@@ -563,9 +617,9 @@
           "name": "t:names.heading",
           "settings": {
             "text": "<h3><strong>常见问题解答</strong></h3>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "left",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
             "type_preset": "h3",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -818,7 +872,6 @@
         "text_H6xhT8",
         "accordion_z3FAiJ"
       ],
-      "disabled": true,
       "name": "t:names.faq_section",
       "settings": {
         "content_direction": "column",
