@@ -580,6 +580,7 @@
         "text_wNTReT",
         "text_X4WDtw"
       ],
+      "disabled": true,
       "name": "t:names.image_with_text",
       "settings": {
         "content_direction": "column",
@@ -872,6 +873,7 @@
         "text_H6xhT8",
         "accordion_z3FAiJ"
       ],
+      "disabled": true,
       "name": "t:names.faq_section",
       "settings": {
         "content_direction": "column",
