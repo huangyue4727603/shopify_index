@@ -173,36 +173,239 @@ shopify_index/
 
 ## 开发指南
 
-### 本地开发
-由于这是 Shopify 主题，需要使用 Shopify CLI 或主题编辑器：
+### 环境准备
 
+#### 1. 安装 Shopify CLI
+
+**macOS (使用 Homebrew):**
 ```bash
-# 使用 Shopify CLI
-shopify theme dev
-
-# 或使用在线主题编辑器
-# 访问 Shopify 管理后台 > 在线商店 > 主题
+brew tap shopify/shopify
+brew install shopify-cli
 ```
 
-### 修改流程
-1. 修改相应的 Liquid/JS/CSS 文件
-2. 在 Shopify 主题编辑器中预览
-3. 更新 `CHANGELOG.md` 记录修改
-4. 提交到 Git
+**或使用 npm (跨平台):**
+```bash
+npm install -g @shopify/cli @shopify/theme
+```
+
+**验证安装:**
+```bash
+shopify version
+```
+
+#### 2. 登录 Shopify 账户
+
+```bash
+shopify auth login
+```
+
+这会打开浏览器让你登录 Shopify 账户并授权 CLI 访问。
+
+---
+
+### 本地开发流程
+
+#### 启动开发服务器
+
+```bash
+# 进入项目目录
+cd /Users/hy/shopify_index
+
+# 启动开发模式
+shopify theme dev
+```
+
+**这会：**
+- 连接到你的 Shopify 商店
+- 创建一个临时开发主题
+- 启动本地服务器（通常是 `http://127.0.0.1:9292`）
+- 监听文件变化，保存后自动同步
+- 提供在线预览链接
+
+**开发时：**
+- 用你喜欢的编辑器修改代码（VSCode、Sublime 等）
+- 保存文件后，修改会自动同步到 Shopify
+- 刷新浏览器即可看到效果
+- 按 `Ctrl + C` 停止开发服务器
+
+---
+
+### Git + Shopify 联动工作流程
+
+本项目已连接到 GitHub，可实现 **本地开发 → GitHub → Shopify** 的自动同步。
+
+#### 完整工作流程
+
+```bash
+# 1️⃣ 启动本地开发和实时预览
+shopify theme dev
+
+# 2️⃣ 修改代码（用编辑器编辑文件）
+#    保存后立即在浏览器看到效果
+
+# 3️⃣ 测试满意后停止开发服务器
+#    按 Ctrl + C
+
+# 4️⃣ 查看修改的文件
+git status
+
+# 5️⃣ 添加到暂存区
+git add .
+# 或只添加特定文件
+git add snippets/header-actions.liquid
+
+# 6️⃣ 提交到本地仓库
+git commit -m "feat: 描述你的修改"
+
+# 7️⃣ 推送到 GitHub
+git push origin main
+
+# 8️⃣ Shopify 自动从 GitHub 同步更新（1-2分钟）
+#    在 Shopify 后台 > 在线商店 > 主题 查看同步状态
+```
+
+#### 提交信息规范
+
+建议使用语义化提交信息：
+
+```bash
+git commit -m "feat: 添加新功能"      # 新功能
+git commit -m "fix: 修复 bug"        # Bug 修复
+git commit -m "style: 样式调整"      # 样式修改
+git commit -m "refactor: 重构代码"   # 代码重构
+git commit -m "docs: 更新文档"       # 文档更新
+git commit -m "chore: 其他修改"      # 其他杂项
+```
+
+#### 更新 CHANGELOG
+
+重大修改后记得更新 `CHANGELOG.md`：
+
+```bash
+# 编辑 CHANGELOG.md，添加修改记录
+
+# 一起提交
+git add CHANGELOG.md snippets/xxx.liquid
+git commit -m "feat: 添加新功能并更新 CHANGELOG"
+git push origin main
+```
+
+---
+
+### 常用命令参考
+
+#### Shopify CLI 命令
+
+```bash
+# 启动开发服务器（实时预览）
+shopify theme dev
+
+# 推送主题到 Shopify（不发布）
+shopify theme push
+
+# 从 Shopify 拉取主题文件到本地
+shopify theme pull
+
+# 发布主题为当前在线主题（谨慎操作！）
+shopify theme publish
+
+# 查看帮助
+shopify theme --help
+```
+
+#### Git 命令
+
+```bash
+# 查看状态
+git status
+
+# 查看修改内容
+git diff
+
+# 查看提交历史
+git log --oneline
+
+# 拉取远程更新
+git pull origin main
+
+# 推送到远程
+git push origin main
+```
+
+---
+
+### 开发注意事项
+
+#### 1. 开发主题 vs 在线主题
+- `shopify theme dev` 创建的是**临时开发主题**，不影响在线主题
+- GitHub 同步的是你连接的那个主题（查看 Shopify 后台确认）
+- **建议**：GitHub 连接到开发/预览主题，测试无误后再发布
+
+#### 2. 同步延迟
+- GitHub 推送后，Shopify 需要 **1-2 分钟**自动同步
+- 在 Shopify 后台 > 在线商店 > 主题 可以看到同步进度和最新的 commit 信息
+
+#### 3. 避免双向修改冲突
+- **推荐**：只在本地修改代码，通过 Git 推送到 Shopify
+- 如果在 Shopify 主题编辑器直接修改，需要手动拉取：
+  ```bash
+  shopify theme pull        # 拉取到本地
+  git add .
+  git commit -m "sync: 同步 Shopify 编辑器的修改"
+  git push origin main      # 推送到 GitHub
+  ```
+
+#### 4. 分支管理
+- `main` 分支：稳定版本，连接到 Shopify
+- 可以创建 `dev` 分支进行实验性开发：
+  ```bash
+  git checkout -b dev       # 创建并切换到 dev 分支
+  # ... 开发和测试 ...
+  git checkout main         # 切换回 main
+  git merge dev             # 合并 dev 到 main
+  git push origin main      # 推送到 GitHub
+  ```
+
+---
 
 ### 文件命名规范
+
 - **内部片段/区块:** `_` 前缀（如 `_product-card.liquid`）
 - **公开区块:** 无前缀（如 `accordion.liquid`）
 - **JavaScript 组件:** kebab-case（如 `product-card.js`）
 - **CSS 类名:** kebab-case（如 `.product-card__title`）
 
+---
+
 ### 代码规范
+
 遵循 KISS、YAGNI、SOLID 原则：
 - 保持代码简洁，避免过度设计
 - 只添加必需的功能
 - 保持代码清晰、可维护
 
 详细开发指南请参考 [CLAUDE.md](./CLAUDE.md)
+
+---
+
+### 快速参考
+
+**日常开发流程：**
+```bash
+shopify theme dev          # 启动开发
+# ... 修改代码，保存，预览 ...
+# Ctrl + C                 # 停止
+
+git add .
+git commit -m "feat: 描述"
+git push origin main       # 推送到 GitHub，Shopify 自动同步
+```
+
+**遇到问题时：**
+- 查看 Shopify CLI 日志
+- 检查 Git 状态：`git status`
+- 查看 Shopify 后台同步状态
+- 参考 [Shopify CLI 文档](https://shopify.dev/docs/themes/tools/cli)
 
 ---
 
