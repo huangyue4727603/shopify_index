@@ -531,6 +531,7 @@
         "text_H6xhT8",
         "accordion_z3FAiJ"
       ],
+      "disabled": true,
       "name": "t:names.faq_section",
       "settings": {
         "content_direction": "column",
@@ -567,7 +568,7 @@
           "type": "text",
           "name": "t:names.header",
           "settings": {
-            "text": "<h3>You may also like </h3>",
+            "text": "<h3>你可能喜欢</h3>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
