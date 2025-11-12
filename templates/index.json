@@ -2327,7 +2327,7 @@
               "type": "button",
               "settings": {
                 "label": "阅读更多",
-                "link": "shopify://collections/all",
+                "link": "shopify://blogs/新闻",
                 "open_in_new_tab": false,
                 "style_class": "button",
                 "width": "fit-content",
