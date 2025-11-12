@@ -367,19 +367,17 @@
             "text_bcfUAK"
           ]
         },
-        "video_AmmEYM": {
-          "type": "video",
-          "name": "t:names.video",
+        "image_ffTBHj": {
+          "type": "image",
           "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/美甲有水印（已使用.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 50,
+            "image": "shopify://shop_images/10_1.png",
+            "link": "",
+            "image_ratio": "square",
+            "width": "fit-content",
+            "custom_width": 70,
+            "width_mobile": "fit-content",
             "custom_width_mobile": 100,
-            "aspect_ratio": "auto",
+            "height": "fit",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -572,7 +570,7 @@
       },
       "block_order": [
         "group_AnD9qE",
-        "video_AmmEYM",
+        "image_ffTBHj",
         "text_8TFHkP",
         "text_Pmaa3E",
         "image_bEgUPz",
