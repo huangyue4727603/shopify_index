@@ -373,6 +373,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/美甲有水印（已使用.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "alt": "",
@@ -580,7 +581,6 @@
         "text_wNTReT",
         "text_X4WDtw"
       ],
-      "disabled": true,
       "name": "t:names.image_with_text",
       "settings": {
         "content_direction": "column",
@@ -648,9 +648,9 @@
             "type_preset": "h5",
             "inherit_color_scheme": true,
             "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
+            "border": "solid",
+            "border_width": 100,
+            "border_opacity": 0,
             "border_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
@@ -661,18 +661,146 @@
             "accordion_row_Lj6tFT": {
               "type": "_accordion-row",
               "settings": {
-                "heading": "What is the return policy?",
+                "heading": "运输政策",
                 "open_by_default": false,
                 "icon": "none",
                 "width": 20
               },
               "blocks": {
+                "text_4VkPiA": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<h2>运输范围</h2>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
                 "text_FMnfQL": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Our goal is for every customer to be totally satisfied with their purchase. If this isn’t the case, let us know and we’ll do our best to work with you to make it right. </p>",
+                    "text": "<ul><li>我们可以运送到世界各地，订单超过免费送货。</li><li>我们运送到世界上几乎每个国家。我们还提供付费快递 （DHL）作为替代选择。</li></ul>",
                     "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_xXrGwA": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>交货时间</strong></p>",
+                    "width": "fit-content",
                     "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_4rjqaj": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<ul><li>订单处理：2-5 个工作日。</li><li>快递运输时间 （DHL）：6-8 个工作日。</li><li>标准运输时间：7-20 个工作日。</li></ul>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_4tTwAa": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>错误的运输信息</strong></p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_QXJTF4": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<ul><li>如果您留下了错误的送货地址或联系方式，请在 <strong>2 小时</strong>内联系我们的客服。</li><li>请注意，客户有责任正确输入送货地址。在处理并运送包裹后，我们无法重定向到另一个送货地址。</li></ul>",
+                    "width": "100%",
+                    "max_width": "none",
                     "alignment": "left",
                     "type_preset": "rte",
                     "font": "var(--font-body--family)",
@@ -694,24 +822,361 @@
                 }
               },
               "block_order": [
-                "text_FMnfQL"
+                "text_4VkPiA",
+                "text_FMnfQL",
+                "text_xXrGwA",
+                "text_4rjqaj",
+                "text_4tTwAa",
+                "text_QXJTF4"
               ]
             },
             "accordion_row_Uy8BtQ": {
               "type": "_accordion-row",
               "settings": {
-                "heading": "Are any purchases final sale?",
+                "heading": "退款政策",
                 "open_by_default": false,
                 "icon": "none",
                 "width": 20
               },
               "blocks": {
+                "text_Y8yTnB": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p>退款和换货</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
                 "text_Dhr6Un": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>We are unable to accept returns on certain items. These will be carefully marked before purchase.</p>",
+                    "text": "<ul><li>我们的保单有效期为 30 天。我们了解在线选择独属于您的商品是多么困难。因此，所有订单均可在 30 天内退换货并获得全额退款，凭购买证明**因经常磨损造成的损坏不符合更换条件。请注意，您可以退回大多数Skypalace产品（未使用）的原包装。不包括退货运费。运费和礼品包装等额外服务费不予退还。</li></ul><p></p><ul><li>但是，如果退货是由于我们的错误（您收到的不正确或有缺陷的商品等）造成的，我们也会支付退货运费。</li></ul><p></p><ul><li>如果商品有库存，我们将在我们收到退回商品后收到退款或更换。</li></ul><p></p><ul><li>请注意，换货后，该商品不符合退款条件。很遗憾，如果您购买后已过去 30 天，我们无法为您提供退款或换货服务。</li></ul><p></p><ul><li>特别优惠中的免费商品是最终销售。请注意，在这种情况下，不提供退货和换货服务。</li></ul><p></p><ul><li>要获得退货资格，您的商品必须未使用且与收到时的状态相同。它还必须采用原包装。仅在保单期限内为有缺陷的产品提供退货标签。</li></ul><p></p><ul><li>退货运费根据产品重量、您的运输地点和您选择的快递而有所不同。</li></ul>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_LytTKt": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>其他不可退货商品：</strong></p>",
                     "width": "100%",
                     "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_fC88zK": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>- 礼品卡<br/><br/>- 定制化产品<br/><br/>- 线香、茶叶等打开或使用后。<br/><br/>- 特价商品（特别优惠）</p><p>如果您订购的商品损坏/有缺陷，或者您收到的商品不正确或丢失商品，请联系我们，请给我们一个机会为您提供更好的服务！我们的最终目标是确保您 100% 满意。我们希望收到您的来信，并知道我们可以改进的地方！随时给我们发电子邮件。非常感谢！</p><p>要完成您的退货，我们需要收据或购买证明。<br/><strong>注意：请不要将您购买的商品退回包裹上显示的地址。</strong></p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_aHPnGi": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>退款（如适用）</strong></p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_WFcJg8": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>收到并检查您的退货后，我们将向您发送一封电子邮件，通知您退款被批准或拒绝。<br/>如果您获得批准，您的退款将得到处理，并且将在 1 周内自动将信用额度应用于您的信用卡或原始付款方式。原始订单的所有运费均不予退还。</p><p>如果您已完成所有这些作，但仍未收到退款，请通过Facebook联系我们</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_RQC8Eb": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>延迟或遗漏退款（如果适用）</strong></p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_jbMNFR": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>如果您尚未收到退款，请先再次检查您的银行账户。<br/>然后联系您的信用卡公司，您的退款可能需要一些时间才能正式发布。<br/>接下来，请联系您的银行。在过帐退款之前通常需要一些处理时间。<br/>如果您已完成所有这些作，但仍未收到退款，请通过Facebook联系我们</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_yFVRBU": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>Sale 商品（如果适用）</strong></p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_8WYNin": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>联系我们只有正价商品可以退款，很遗憾，促销商品无法退款。</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_KFAQrz": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>换货（如适用）</strong></p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_JcxfVi": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>我们仅在有缺陷或损坏的物品时更换。如果您需要换取相同的商品，请Facebook联系我们。</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_XazhHL": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p><strong>无标签退货</strong></p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_qrwenz": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>要退回您的产品，您将负责支付自己的退货运费。运费不予退还。如果您收到退款，退货运费将从您的退款中扣除。<br/><br/>根据您居住的地方，您更换的产品到达您手中所需的时间可能会有所不同。<br/><br/>您可以使用自己的运输方式。我们强烈建议您使用提供跟踪号的托运人，以便您可以跟踪您的货件。请务必保留此跟踪号作为记录。Skypalace对通过不可追踪的承运商发送的包裹在运输途中丢失不承担任何责任。</p>",
+                    "width": "100%",
+                    "max_width": "none",
                     "alignment": "left",
                     "type_preset": "rte",
                     "font": "var(--font-body--family)",
@@ -733,14 +1198,27 @@
                 }
               },
               "block_order": [
-                "text_Dhr6Un"
+                "text_Y8yTnB",
+                "text_Dhr6Un",
+                "text_LytTKt",
+                "text_fC88zK",
+                "text_aHPnGi",
+                "text_WFcJg8",
+                "text_RQC8Eb",
+                "text_jbMNFR",
+                "text_yFVRBU",
+                "text_8WYNin",
+                "text_KFAQrz",
+                "text_JcxfVi",
+                "text_XazhHL",
+                "text_qrwenz"
               ]
             },
             "accordion_row_YK6RtK": {
               "type": "_accordion-row",
               "name": "t:names.accordion_dash_row",
               "settings": {
-                "heading": "When will I get my order?",
+                "heading": "关于星络云台",
                 "open_by_default": false,
                 "icon": "none",
                 "width": 20
@@ -776,96 +1254,12 @@
               "block_order": [
                 "text_YqQi4J"
               ]
-            },
-            "accordion_row_fDYypG": {
-              "type": "_accordion-row",
-              "name": "t:names.accordion_dash_row",
-              "settings": {
-                "heading": "Where are your products manufactured?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 20
-              },
-              "blocks": {
-                "text_LL4gXK": {
-                  "type": "text",
-                  "name": "t:names.text",
-                  "settings": {
-                    "text": "<p>Our products are manufactured both locally and globally. We carefully select our manufacturing partners to ensure our products are high quality and a fair value. </p>",
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_LL4gXK"
-              ]
-            },
-            "accordion_row_4dArnT": {
-              "type": "_accordion-row",
-              "name": "t:names.accordion_dash_row",
-              "settings": {
-                "heading": "How much does shipping cost?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 20
-              },
-              "blocks": {
-                "text_dK8pPK": {
-                  "type": "text",
-                  "name": "t:names.text",
-                  "settings": {
-                    "text": "<p>Shipping is calculated based on your location and the items in your order. You will always know the shipping price before you purchase.</p>",
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_dK8pPK"
-              ]
             }
           },
           "block_order": [
             "accordion_row_Lj6tFT",
             "accordion_row_Uy8BtQ",
-            "accordion_row_YK6RtK",
-            "accordion_row_fDYypG",
-            "accordion_row_4dArnT"
+            "accordion_row_YK6RtK"
           ]
         }
       },
@@ -873,7 +1267,6 @@
         "text_H6xhT8",
         "accordion_z3FAiJ"
       ],
-      "disabled": true,
       "name": "t:names.faq_section",
       "settings": {
         "content_direction": "column",
