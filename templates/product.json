@@ -154,11 +154,24 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {}
+                },
+                "review_HHXBVX": {
+                  "type": "review",
+                  "name": "t:names.product_review_stars",
+                  "settings": {
+                    "stars_style": "shaded",
+                    "show_number": true,
+                    "rating_color": "primary",
+                    "type_preset": "paragraph",
+                    "alignment": "left"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "text_xrnftG",
-                "price_tVjtKg"
+                "price_tVjtKg",
+                "review_HHXBVX"
               ]
             },
             "divider_VJhene": {
@@ -597,7 +610,7 @@
             "image_ratio": "square",
             "width": "fit-content",
             "custom_width": 70,
-            "width_mobile": "fit-content",
+            "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",
             "border": "none",
