@@ -372,7 +372,7 @@
           "settings": {
             "image": "shopify://shop_images/10_1.png",
             "link": "",
-            "image_ratio": "square",
+            "image_ratio": "adapt",
             "width": "fit-content",
             "custom_width": 70,
             "width_mobile": "fit-content",
