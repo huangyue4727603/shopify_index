@@ -648,7 +648,7 @@
             "type_preset": "h5",
             "inherit_color_scheme": true,
             "color_scheme": "",
-            "border": "solid",
+            "border": "none",
             "border_width": 100,
             "border_opacity": 0,
             "border_radius": 0,
@@ -1288,7 +1288,7 @@
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
                     "height": "fit",
-                    "border": "solid",
+                    "border": "none",
                     "border_width": 100,
                     "border_opacity": 0,
                     "border_radius": 0,
@@ -1350,6 +1350,29 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {}
+                },
+                "image_tiRczr": {
+                  "type": "image",
+                  "name": "t:names.image",
+                  "settings": {
+                    "image": "shopify://shop_images/jimeng-2025-11-05-6060-_..._ec183f43-9736-44eb-80ef-5e8030a98932.png",
+                    "link": "",
+                    "image_ratio": "adapt",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 100,
+                    "border_opacity": 0,
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -1357,7 +1380,8 @@
                 "text_R9gUG4",
                 "image_z6fWUM",
                 "text_Q6w6Lj",
-                "text_RJknjF"
+                "text_RJknjF",
+                "image_tiRczr"
               ]
             }
           },
