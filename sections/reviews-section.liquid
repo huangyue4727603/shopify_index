@@ -1,0 +1,436 @@
+{% comment %}
+  Product Reviews Section
+  Displays customer reviews in a masonry layout
+  Automatically selects reviews based on current language
+{% endcomment %}
+
+{{ 'reviews.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  # Detect current language
+  assign current_locale = request.locale.iso_code | default: 'en'
+
+  # Use date to create pseudo-random offset (changes daily)
+  assign today = 'now' | date: '%j'
+  assign offset = today | modulo: 43
+
+  # Define number of reviews to show
+  assign reviews_to_show = 8
+
+  # Pre-generate asset URLs
+  assign avatar1 = 'review-avatar-1.png' | asset_url
+  assign avatar2 = 'review-avatar-2.png' | asset_url
+  assign avatar3 = 'review-avatar-3.png' | asset_url
+  assign avatar4 = 'review-avatar-4.png' | asset_url
+  assign avatar5 = 'review-avatar-5.png' | asset_url
+  assign avatar6 = 'review-avatar-6.png' | asset_url
+  assign avatar7 = 'review-avatar-7.png' | asset_url
+  assign avatar8 = 'review-avatar-8.png' | asset_url
+
+  assign product1 = 'review-product-1.png' | asset_url
+  assign product2 = 'review-product-2.png' | asset_url
+  assign product3 = 'review-product-3.png' | asset_url
+  assign product4 = 'review-product-4.png' | asset_url
+  assign product5 = 'review-product-5.png' | asset_url
+  assign product6 = 'review-product-6.png' | asset_url
+  assign product7 = 'review-product-7.jpg' | asset_url
+  assign product8 = 'review-product-8.jpg' | asset_url
+  assign product9 = 'review-product-9.jpg' | asset_url
+  assign product10 = 'review-product-10.jpg' | asset_url
+  assign product11 = 'review-product-11.jpg' | asset_url
+  assign product12 = 'review-product-12.jpg' | asset_url
+  assign product13 = 'review-product-13.jpg' | asset_url
+%}
+
+<div class="reviews-section" data-section-id="{{ section.id }}">
+  <div class="reviews-section-inner">
+    <div class="reviews-header">
+      <h2 class="reviews-header__title">精选评论</h2>
+      <div class="reviews-header__nav">
+        <button class="reviews-nav__btn reviews-nav__btn--prev" type="button" aria-label="Previous">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="reviews-nav__btn reviews-nav__btn--next" type="button" aria-label="Next">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="reviews-carousel">
+      <div class="reviews-carousel__track">
+    {% comment %} Display reviews based on language {% endcomment %}
+
+    {% if current_locale == 'zh-CN' or current_locale == 'zh' %}
+      {% comment %} Chinese Reviews {% endcomment %}
+      {% assign reviews = "晴天**咪|2025/01/20|4|这条手串非常漂亮！做工精细，佩戴舒适。颜色也很正，性价比很高。|0.6×108串珠（收藏款）,
+      星星**666|2025/01/20|5|质量真的很好！超出期待。店家包装也很用心。|18+13至尊（收藏款）,
+      阳光**Leo|2025/01/19|5|收到货很惊喜，质感超级好！戴上后运气也变好了，推荐购买！|黑曜石守护手串,
+      甜甜**irl|2025/01/18|5|款式很独特，戴着很有气质。朋友都问我在哪买的，强烈推荐！|粉晶桃花手串,
+      爱吃**兔子|2025/01/17|4|手串很漂亮，但是珠子有点小。整体还是很满意的，戴着很舒服。|草莓晶招财手串,
+      雨**虹|2025/01/16|5|收到了！太美了，比图片还好看。包装很精美，送人也很有面子。|碧玺转运手串,
+      萌萌**仙女|2025/01/15|5|超级喜欢！戴了一周感觉睡眠都变好了。宝贝们快冲！|紫水晶助眠手串,
+      低调**华|2025/01/14|3|手串质量还行，但是颜色和图片有点差距。不过价格合理，还能接受。|金曜石财富手串,
+      温**刀|2025/01/13|5|这是我买过最满意的手串！材质很好，戴着很有质感。客服态度也很好。|翡翠平安手串,
+      樱花**肩|2025/01/12|5|太好看了！戴上后收到好多赞美。店家还送了小礼物，好贴心！|粉水晶姻缘手串,
+      月光**猫|2025/01/11|5|第二次购买了，质量一如既往的好！这次买来送朋友，她也很喜欢。|玛瑙辟邪手串,
+      风中**朵|2025/01/10|5|手串很精致，戴着很有气场。包装也很用心，推荐给大家！|青金石智慧手串,
+      棉花**女|2025/01/09|5|收到货啦！超级满意，质量很好，戴着也很舒服。五星好评！|红玛瑙本命年手串,
+      冷**霜|2025/01/08|4|性价比不错，手工很细致。就是物流有点慢，但东西是真不错。|黄水晶财运手串,
+      清**来|2025/01/07|5|特别喜欢！戴上感觉整个人的气质都提升了。朋友看到都想买。|海蓝宝平安手串,
+      梦**开|2025/01/06|5|超赞！材质很好，做工精细。戴了几天越来越喜欢，会回购的。|石榴石活力手串,
+      北极**光|2025/01/05|4|手串不错，但是扣子有点松。联系客服很快解决了，服务态度好。|虎眼石勇气手串,
+      柠檬**加糖|2025/01/04|5|非常满意！颜色正，质感好。送给妈妈的生日礼物，她特别喜欢。|红纹石爱情手串,
+      夏**风|2025/01/03|5|第三次购买了！每次都很满意，准备再入手几条送朋友。|月光石直觉手串,
+      暖**初|2025/01/02|4|手串很漂亮，戴着很舒服。就是有点贵，但质量确实对得起价格。|紫龙晶高贵手串,
+      追**年|2025/01/01|5|新年第一单就买了这个，寓意很好！戴着很开心，希望新年好运。|招财貔貅手串,
+      雪**声|2024/12/31|5|跨年礼物！送给自己的，非常喜欢。做工精致，戴着很有质感。|青金石智慧手串,
+      蓝**姬|2024/12/30|4|质量不错，但是颜色比图片稍微深一点。整体还是很满意的。|天河石幸运手串,
+      小**呀|2024/12/29|5|太喜欢了！戴了两天就收到好多夸赞。真的很显气质。|粉晶桃花手串,
+      云淡**轻|2024/12/28|5|收藏了很久终于下单了！没让我失望，质量超好。|碧玺转运手串,
+      森**鹿|2024/12/27|4|手串很精致，包装也很用心。就是珠子有点小，不过还挺好看的。|水晶能量手串,
+      粉**泡|2024/12/26|5|圣诞礼物！朋友超级喜欢，说质量很好。我也准备给自己买一条。|玫瑰粉晶手串,
+      音**跃|2024/12/25|5|圣诞快乐！收到礼物好开心。手串很漂亮，戴着很舒服。|海蓝宝手串,
+      夜空**星|2024/12/24|5|平安夜收到的，好幸运！质量很好，非常满意。|黑曜石守护手串,
+      薄**凉|2024/12/23|4|手串不错，性价比挺高的。就是物流慢了点，但东西确实好。|石榴石手串,
+      简单**福|2024/12/22|5|超级满意！这是我买过最好的手串了。质感特别好。|翡翠平安手串,
+      温**你|2024/12/21|5|冬至快乐！手串很漂亮，戴着很温暖。店家还送了小礼物。|红玛瑙手串,
+      流**水|2024/12/20|4|质量不错，做工精细。就是扣子有点紧，戴久了会习惯的。|青金石手串,
+      陌**开|2024/12/19|5|太好看了！颜色很正，质感很好。已经推荐给闺蜜了。|粉水晶手串,
+      岁**好|2024/12/18|5|第四次回购了！每次都很满意，质量稳定。值得信赖的店家。|紫水晶手串,
+      诗**居|2024/12/17|4|手串很精致，戴着很有气质。就是价格有点高，但质量确实好。|碧玺手串,
+      清晨**珠|2024/12/16|5|非常喜欢！材质很好，做工精细。戴了几天感觉运气都变好了。|黄水晶手串,
+      向日**笑|2024/12/15|5|超赞！收到货第一时间就戴上了。质量很好，非常满意。|虎眼石手串,
+      静**开|2024/12/14|4|手串不错，性价比高。就是珠子有大有小，不过不影响整体美观。|红纹石手串,
+      时**水|2024/12/13|5|太满意了！这是我第五次购买了。每次都不会让我失望。|月光石手串,
+      慢**好|2024/12/12|5|双十二买的，优惠力度大！手串质量很好，非常划算。|紫龙晶手串,
+      遇**好|2024/12/11|4|质量不错，做工精细。就是物流有点慢，好在东西没让我失望。|天河石手串,
+      小**|2024/12/10|5|超级喜欢！颜色很正，质感很好。已经安利给好多朋友了。|海蓝宝手串,
+      糖**|2024/12/09|5|太美了！收到货就立刻戴上了。质量超好，非常满意。|石榴石手串,
+      星**烫|2024/12/08|4|手串很漂亮，戴着舒服。就是扣子有点难扣，需要适应一下。|黑曜石手串,
+      人**火|2024/12/07|5|第六次回购！每次都很满意，这次买来送朋友的。|翡翠手串,
+      温**月|2024/12/06|5|质量超好！做工精细，戴着很有质感。强烈推荐！|红玛瑙手串,
+      清**|2024/12/05|4|手串不错，性价比高。就是颜色比图片稍微浅一点点。|青金石手串,
+      余**你|2024/12/04|5|太喜欢了！这是我今年买的最满意的手串。质量超级好。|粉水晶手串,
+      岁**柔|2024/12/03|5|超赞！材质好，做工精细。戴了一周，越来越喜欢。|紫水晶手串" | split: ',' %}
+    {% else %}
+      {% comment %} English Reviews {% endcomment %}
+      {% assign reviews = "Sunny**|2025/01/20|4|Beautiful bracelet! Excellent craftsmanship, very comfortable to wear. The color is perfect and great value for money.|0.6×108 Beads (Collection Edition),
+      Starry**|2025/01/20|5|Quality is really good! Exceeded expectations. The packaging was also very thoughtful.|18+13 Supreme (Collection),
+      Happy**|2025/01/19|5|So happy with my purchase! The texture is amazing. Feel like my luck has improved since wearing it.|Obsidian Protection Bracelet,
+      Cool**|2025/01/18|5|Very unique style, looks so elegant. All my friends ask where I got it. Highly recommend!|Rose Quartz Love Bracelet,
+      Sweet**|2025/01/17|4|The bracelet is beautiful but the beads are a bit small. Overall very satisfied though, comfortable to wear.|Strawberry Quartz Fortune Bracelet,
+      Moon**|2025/01/16|5|Just arrived! Even more beautiful than the pictures. The packaging was exquisite, perfect for gifting.|Tourmaline Luck Bracelet,
+      Cute**|2025/01/15|5|Love it so much! Been wearing it for a week and my sleep has improved. Everyone should get one!|Amethyst Sleep Bracelet,
+      Lucky**|2025/01/14|3|The bracelet quality is okay but the color differs slightly from the pictures. Fair price though.|Gold Obsidian Wealth Bracelet,
+      Gentle**|2025/01/13|5|This is the best bracelet I've ever bought! Great material and texture. Customer service was excellent too.|Jade Peace Bracelet,
+      Pink**|2025/01/12|5|So gorgeous! Got so many compliments after wearing it. The shop even included a small gift, so thoughtful!|Pink Crystal Love Bracelet,
+      Mystic**|2025/01/11|5|Second purchase! Quality is consistently good. Bought this one for a friend and she loves it too.|Agate Protection Bracelet,
+      Cloud**|2025/01/10|5|Very delicate bracelet with great presence. Packaging was thoughtful too. Recommend to everyone!|Lapis Lazuli Wisdom Bracelet,
+      Cotton**|2025/01/09|5|Just received it! Super satisfied, great quality and very comfortable to wear. Five stars!|Red Agate Bracelet,
+      Cold**|2025/01/08|4|Good value for money, very detailed craftsmanship. Shipping was a bit slow but the item is really nice.|Citrine Fortune Bracelet,
+      Fresh**|2025/01/07|5|Absolutely love it! Feel like my whole aura has improved. Friends want to buy one after seeing it.|Aquamarine Peace Bracelet,
+      Dreamy**|2025/01/06|5|Amazing! Great material and fine craftsmanship. Been wearing it for days and love it more each day. Will buy again.|Garnet Vitality Bracelet,
+      North**|2025/01/05|4|Nice bracelet but the clasp is a bit loose. Contacted customer service and they resolved it quickly. Great service.|Tiger Eye Courage Bracelet,
+      Lemon**|2025/01/04|5|Very satisfied! Perfect color and texture. Bought it as a birthday gift for my mom and she loves it.|Rhodonite Love Bracelet,
+      Summer**|2025/01/03|5|Third purchase! Always satisfied every time. Planning to get a few more for friends.|Moonstone Intuition Bracelet,
+      Warm**|2025/01/02|4|Beautiful bracelet, very comfortable to wear. A bit pricey but quality matches the price.|Purple Jade Nobility Bracelet,
+      Dream**|2025/01/01|5|First purchase of the new year! Great meaning. Very happy wearing it, hoping for good luck this year.|Fortune Pixiu Bracelet,
+      Snow**|2024/12/31|5|New Year's gift! Got it for myself and love it. Exquisite craftsmanship, very textured.|Lapis Lazuli Wisdom Bracelet,
+      Blue**|2024/12/30|4|Good quality but color is slightly darker than pictures. Overall still very satisfied.|Amazonite Lucky Bracelet,
+      Lucky**|2024/12/29|5|Love it so much! Got tons of compliments after wearing it for two days. Really enhances elegance.|Rose Quartz Peach Blossom Bracelet,
+      Cloudy**|2024/12/28|5|Had it bookmarked for so long and finally ordered! Didn't disappoint me, quality is superb.|Tourmaline Fortune Bracelet,
+      Forest**|2024/12/27|4|Very delicate bracelet with thoughtful packaging. Beads are a bit small but still looks nice.|Crystal Energy Bracelet,
+      Pink**|2024/12/26|5|Christmas gift! Friend absolutely loves it and says quality is excellent. Going to get one for myself.|Rose Pink Crystal Bracelet,
+      Music**|2024/12/25|5|Merry Christmas! So happy to receive this gift. Beautiful bracelet, very comfortable to wear.|Aquamarine Bracelet,
+      Bright**|2024/12/24|5|Received it on Christmas Eve, so lucky! Great quality, very satisfied.|Obsidian Protection Bracelet,
+      Mint**|2024/12/23|4|Nice bracelet with good value. Shipping was slow but item is definitely good.|Garnet Bracelet,
+      Simple**|2024/12/22|5|Super satisfied! This is the best bracelet I've ever bought. Texture is exceptional.|Jade Peace Bracelet,
+      Warm**|2024/12/21|5|Happy Winter Solstice! Beautiful bracelet, feels warm wearing it. Shop included a small gift too.|Red Agate Bracelet,
+      Time**|2024/12/20|4|Good quality, fine craftsmanship. Clasp is a bit tight but will get used to it.|Lapis Lazuli Bracelet,
+      Flower**|2024/12/19|5|So gorgeous! Perfect color and great texture. Already recommended it to my best friend.|Pink Crystal Bracelet,
+      Peace**|2024/12/18|5|Fourth repurchase! Always satisfied, consistent quality. Trustworthy shop.|Amethyst Bracelet,
+      Poetic**|2024/12/17|4|Very delicate bracelet with great elegance. Price is a bit high but quality is definitely good.|Tourmaline Bracelet,
+      Morning**|2024/12/16|5|Absolutely love it! Great material and fine craftsmanship. Feel like my luck improved after wearing it.|Citrine Bracelet,
+      Sunf**|2024/12/15|5|Awesome! Put it on immediately after receiving. Great quality, very satisfied.|Tiger Eye Bracelet,
+      Wait**|2024/12/14|4|Nice bracelet with good value. Beads vary in size slightly but doesn't affect overall beauty.|Rhodonite Bracelet,
+      Time**|2024/12/13|5|So satisfied! This is my fifth purchase. Never disappoints me.|Moonstone Bracelet,
+      Getting**|2024/12/12|5|Bought on Double 12 sale, great discount! Bracelet quality is excellent, very worth it.|Purple Jade Bracelet,
+      Meet**|2024/12/11|4|Good quality and fine craftsmanship. Shipping was slow but item didn't disappoint.|Amazonite Bracelet,
+      Tiny**|2024/12/10|5|Love it so much! Perfect color and great texture. Already recommended to many friends.|Aquamarine Bracelet,
+      Candy**|2024/12/09|5|So beautiful! Put it on immediately after receiving. Quality is superb, very satisfied.|Garnet Bracelet,
+      Galaxy**|2024/12/08|4|Beautiful bracelet, comfortable to wear. Clasp is a bit tricky but will adapt.|Obsidian Bracelet,
+      Life**|2024/12/07|5|Sixth repurchase! Always satisfied, bought this one for a friend.|Jade Bracelet,
+      Gentle**|2024/12/06|5|Quality is superb! Fine craftsmanship, very textured. Highly recommend!|Red Agate Bracelet,
+      Happy**|2024/12/05|4|Nice bracelet with good value. Color is slightly lighter than pictures.|Lapis Lazuli Bracelet,
+      With**|2024/12/04|5|Love it so much! This is the most satisfying bracelet I bought this year. Quality is amazing.|Pink Crystal Bracelet,
+      Tender**|2024/12/03|5|Awesome! Great material and fine craftsmanship. Been wearing for a week, love it more each day.|Amethyst Bracelet" | split: ',' %}
+    {% endif %}
+
+    {% comment %} Render 8 reviews starting from offset {% endcomment %}
+    {% for i in (0..7) %}
+      {% assign review_index = offset | plus: i | modulo: reviews.size %}
+      {% assign review_data = reviews[review_index] | split: '|' %}
+
+      {% comment %} Map avatar and product image indices {% endcomment %}
+      {% assign avatar_url = '' %}
+      {% assign product_url = '' %}
+
+      {% assign avatar_mod = i | modulo: 8 %}
+      {% if avatar_mod == 0 %}
+        {% assign avatar_url = avatar1 %}
+      {% elsif avatar_mod == 1 %}
+        {% assign avatar_url = avatar2 %}
+      {% elsif avatar_mod == 2 %}
+        {% assign avatar_url = avatar3 %}
+      {% elsif avatar_mod == 3 %}
+        {% assign avatar_url = avatar4 %}
+      {% elsif avatar_mod == 4 %}
+        {% assign avatar_url = avatar5 %}
+      {% elsif avatar_mod == 5 %}
+        {% assign avatar_url = avatar6 %}
+      {% elsif avatar_mod == 6 %}
+        {% assign avatar_url = avatar7 %}
+      {% elsif avatar_mod == 7 %}
+        {% assign avatar_url = avatar8 %}
+      {% endif %}
+
+      {% assign product_mod = review_index | modulo: 13 %}
+      {% if product_mod == 0 %}
+        {% assign product_url = product1 %}
+      {% elsif product_mod == 1 %}
+        {% assign product_url = product2 %}
+      {% elsif product_mod == 2 %}
+        {% assign product_url = product3 %}
+      {% elsif product_mod == 3 %}
+        {% assign product_url = product4 %}
+      {% elsif product_mod == 4 %}
+        {% assign product_url = product5 %}
+      {% elsif product_mod == 5 %}
+        {% assign product_url = product6 %}
+      {% elsif product_mod == 6 %}
+        {% assign product_url = product7 %}
+      {% elsif product_mod == 7 %}
+        {% assign product_url = product8 %}
+      {% elsif product_mod == 8 %}
+        {% assign product_url = product9 %}
+      {% elsif product_mod == 9 %}
+        {% assign product_url = product10 %}
+      {% elsif product_mod == 10 %}
+        {% assign product_url = product11 %}
+      {% elsif product_mod == 11 %}
+        {% assign product_url = product12 %}
+      {% elsif product_mod == 12 %}
+        {% assign product_url = product13 %}
+      {% endif %}
+
+      {%- render 'review-card',
+        author: review_data[0],
+        date: review_data[1],
+        rating: review_data[2],
+        content: review_data[3],
+        verified: true,
+        variant: review_data[4],
+        avatar: avatar_url,
+        image: product_url
+      -%}
+    {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+  {% comment %} Review Modal {% endcomment %}
+  <div class="review-modal" id="review-modal" style="display: none;">
+    <div class="review-modal__overlay"></div>
+    <div class="review-modal__container">
+      <div class="review-modal__image-wrapper">
+        <img class="review-modal__image" src="" alt="" loading="lazy">
+      </div>
+      <div class="review-modal__content">
+        <div class="review-modal__header">
+          <span class="review-modal__author"></span>
+        </div>
+        <div class="review-modal__date"></div>
+        <div class="review-modal__rating"></div>
+        <div class="review-modal__text"></div>
+      </div>
+      <button class="review-modal__close" type="button" aria-label="Close">×</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Carousel navigation
+  const track = document.querySelector('.reviews-carousel__track');
+  const prevBtn = document.querySelector('.reviews-nav__btn--prev');
+  const nextBtn = document.querySelector('.reviews-nav__btn--next');
+
+  if (track && prevBtn && nextBtn) {
+    const scrollAmount = 300; // Scroll by 300px each click
+
+    prevBtn.addEventListener('click', function() {
+      track.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+
+    nextBtn.addEventListener('click', function() {
+      track.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+
+    // Update button states based on scroll position
+    function updateNavButtons() {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      prevBtn.disabled = track.scrollLeft <= 0;
+      nextBtn.disabled = track.scrollLeft >= maxScroll - 1;
+    }
+
+    track.addEventListener('scroll', updateNavButtons);
+    updateNavButtons(); // Initial state
+  }
+
+  // Modal functionality
+  const modal = document.getElementById('review-modal');
+  const overlay = modal.querySelector('.review-modal__overlay');
+  const closeBtn = modal.querySelector('.review-modal__close');
+  const reviewCards = document.querySelectorAll('.review-card');
+
+  function openModal(reviewData) {
+    const author = modal.querySelector('.review-modal__author');
+    const date = modal.querySelector('.review-modal__date');
+    const rating = modal.querySelector('.review-modal__rating');
+    const text = modal.querySelector('.review-modal__text');
+    const image = modal.querySelector('.review-modal__image');
+    const imageWrapper = modal.querySelector('.review-modal__image-wrapper');
+
+    // Set content
+    author.textContent = reviewData.author;
+    date.textContent = reviewData.date;
+    text.textContent = reviewData.content;
+
+    // Set product image
+    if (reviewData.image) {
+      image.src = reviewData.image;
+      image.alt = reviewData.author + "'s review photo";
+      imageWrapper.style.display = 'block';
+    } else {
+      imageWrapper.style.display = 'none';
+    }
+
+    // Set rating stars
+    const ratingNum = parseInt(reviewData.rating) || 0;
+    rating.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      const star = document.createElement('img');
+      star.className = 'review-modal__star';
+      star.width = 16;
+      star.height = 16;
+      star.alt = 'Star';
+      if (i <= ratingNum) {
+        star.src = '{{ "icon-star-filled.png" | asset_url }}';
+      } else {
+        star.src = '{{ "icon-star-empty.png" | asset_url }}';
+      }
+      rating.appendChild(star);
+    }
+
+    // Show modal
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // Add click event to review cards
+  reviewCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const reviewData = {
+        author: this.dataset.reviewAuthor,
+        date: this.dataset.reviewDate,
+        rating: this.dataset.reviewRating,
+        content: this.dataset.reviewContent,
+        verified: this.dataset.reviewVerified,
+        variant: this.dataset.reviewVariant,
+        image: this.dataset.reviewImage
+      };
+      openModal(reviewData);
+    });
+
+    // Keyboard accessibility
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const reviewData = {
+          author: this.dataset.reviewAuthor,
+          date: this.dataset.reviewDate,
+          rating: this.dataset.reviewRating,
+          content: this.dataset.reviewContent,
+          verified: this.dataset.reviewVerified,
+          variant: this.dataset.reviewVariant,
+          image: this.dataset.reviewImage
+        };
+        openModal(reviewData);
+      }
+    });
+  });
+
+  // Close modal events
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'flex') {
+      closeModal();
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Reviews Section",
+  "tag": "section",
+  "class": "section-reviews",
+  "enabled_on": {
+    "templates": ["product", "index", "page"]
+  },
+  "settings": [
+    {
+      "type": "number",
+      "id": "reviews_count",
+      "default": 99,
+      "label": "Reviews count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_load_more",
+      "label": "Show load more button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "load_more_text",
+      "label": "Load more button text",
+      "default": "显示更多评论"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews Section"
+    }
+  ]
+}
+{% endschema %}

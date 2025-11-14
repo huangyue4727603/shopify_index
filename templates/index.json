@@ -2001,6 +2001,14 @@
         "padding-block-end": 48
       }
     },
+    "reviews_section_homepage": {
+      "type": "reviews-section",
+      "settings": {
+        "reviews_count": 99,
+        "show_load_more": true,
+        "load_more_text": "显示更多评论"
+      }
+    },
     "section_4Na3BA": {
       "type": "section",
       "blocks": {
@@ -2181,6 +2189,7 @@
     "section_D9crqQ",
     "section_CfrD7y",
     "section_zqFQKc",
-    "section_4Na3BA"
+    "section_4Na3BA",
+    "reviews_section_homepage"
   ]
 }

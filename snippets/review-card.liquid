@@ -1,0 +1,63 @@
+{% comment %}
+  Review Card Component
+  Parameters:
+  - author: string
+  - date: string
+  - rating: number (1-5)
+  - content: string
+  - verified: boolean
+  - variant: string (optional)
+  - product_name: string (optional)
+  - image: string URL (optional - product image)
+  - avatar: string URL (optional - user avatar)
+{% endcomment %}
+
+<div class="review-card"
+     data-review-author="{{ author }}"
+     data-review-date="{{ date }}"
+     data-review-rating="{{ rating }}"
+     data-review-content="{{ content }}"
+     data-review-verified="{{ verified }}"
+     data-review-variant="{{ variant }}"
+     data-review-product="{{ product_name }}"
+     data-review-image="{{ image }}"
+     role="button"
+     tabindex="0">
+
+  {% if image %}
+    <div class="review-card__image">
+      <img src="{{ image }}" alt="{{ author }}'s review photo" loading="lazy">
+    </div>
+  {% endif %}
+
+  <div class="review-card__body">
+    <div class="review-card__user">
+      {% if avatar %}
+        <img class="review-card__avatar" src="{{ avatar }}" alt="{{ author }}" width="40" height="40">
+      {% else %}
+        <div class="review-card__avatar review-card__avatar--placeholder">
+          {{ author | slice: 0 }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="review-card__author-name">{{ author }}</div>
+
+    <div class="review-card__rating">
+      {% assign rating_num = rating | plus: 0 %}
+      {% for i in (1..5) %}
+        {% if i <= rating_num %}
+          <img class="review-card__star" src="{{ 'icon-star-filled.png' | asset_url }}" alt="Star" width="14" height="14">
+        {% else %}
+          <img class="review-card__star" src="{{ 'icon-star-empty.png' | asset_url }}" alt="Star" width="14" height="14">
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="review-card__date">{{ date }}</div>
+
+    {% if content %}
+      <p class="review-card__content">{{ content }}</p>
+    {% endif %}
+  </div>
+</div>
