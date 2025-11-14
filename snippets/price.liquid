@@ -82,25 +82,31 @@
   {%- comment -%} 已售数量（仅在非产品详情页显示） {%- endcomment -%}
   {%- if product_resource != blank and template.name != 'product' -%}
     {%- liquid
-      # 基准日期: 2025-01-01
-      assign base_date = '2025-01-01' | date: '%s'
-      assign today = 'now' | date: '%s'
-      assign days_diff = today | minus: base_date | divided_by: 86400
+      # 获取今天是一年中的第几天（1-365）
+      assign today_day_of_year = 'now' | date: '%j' | plus: 0
 
-      # 使用产品ID生成唯一的基础销量
+      # 使用产品ID生成唯一的基础销量（50-300之间）
       assign product_id_str = product_resource.id | append: ''
       assign last_digit = product_id_str | slice: -1, 1 | plus: 0
       assign second_last = product_id_str | slice: -2, 1 | plus: 0
-      assign base_sold = last_digit | times: 50 | plus: second_last | times: 30 | plus: 200
+      assign third_last = product_id_str | slice: -3, 1 | plus: 0
 
-      # 每天递增0-10个（根据产品ID确定固定值）
-      assign daily_increment = last_digit | modulo: 11
+      # 基础销量：分步计算避免运算符优先级问题
+      assign part1 = last_digit | times: 15
+      assign part2 = second_last | times: 10
+      assign part3 = third_last | times: 5
+      assign base_sold = part1 | plus: part2 | plus: part3 | plus: 50
 
-      # 计算总销量：base_sold + (days_diff * daily_increment)
-      assign incremental_sold = days_diff | times: daily_increment
-      assign total_sold = base_sold | plus: incremental_sold
+      # 每天递增量：0-2个（根据产品ID确定固定值，更保守的增长）
+      assign daily_increment = last_digit | modulo: 3
 
-      # 限制在1000以内
+      # 计算今年累积的销量（使用今年的天数，不会无限增长）
+      assign yearly_increment = today_day_of_year | times: daily_increment
+
+      # 总销量 = 基础销量 + 今年累积
+      assign total_sold = base_sold | plus: yearly_increment
+
+      # 限制在999以内
       if total_sold > 999
         assign total_sold = 999
       endif
