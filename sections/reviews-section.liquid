@@ -271,18 +271,40 @@
   const nextBtn = document.querySelector('.reviews-nav__btn--next');
 
   if (track && prevBtn && nextBtn) {
-    const scrollAmount = 300; // Scroll by 300px each click
+    // 获取卡片宽度（包括间距）
+    function getCardWidth() {
+      const card = track.querySelector('.review-card');
+      if (!card) return 300;
+      const cardWidth = card.offsetWidth;
+      const gap = 20; // CSS 中定义的 gap
+      return cardWidth + gap;
+    }
 
     prevBtn.addEventListener('click', function() {
-      track.scrollBy({
-        left: -scrollAmount,
+      const cardWidth = getCardWidth();
+      const currentScroll = track.scrollLeft;
+      // 计算当前位置对应的卡片索引
+      const currentIndex = Math.round(currentScroll / cardWidth);
+      // 滚动到上一张卡片的起始位置
+      const targetScroll = Math.max(0, (currentIndex - 1) * cardWidth);
+
+      track.scrollTo({
+        left: targetScroll,
         behavior: 'smooth'
       });
     });
 
     nextBtn.addEventListener('click', function() {
-      track.scrollBy({
-        left: scrollAmount,
+      const cardWidth = getCardWidth();
+      const currentScroll = track.scrollLeft;
+      // 计算当前位置对应的卡片索引
+      const currentIndex = Math.round(currentScroll / cardWidth);
+      // 滚动到下一张卡片的起始位置
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      const targetScroll = Math.min(maxScroll, (currentIndex + 1) * cardWidth);
+
+      track.scrollTo({
+        left: targetScroll,
         behavior: 'smooth'
       });
     });
