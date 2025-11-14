@@ -41,39 +41,70 @@
   endif
 -%}
 
-<div ref="priceContainer">
-  {% if show_sale_price_first == false and show_compare_price %}
-    <span role="group">
-      <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-      <span class="compare-at-price">{{- compare_at_price -}}</span>
-    </span>
-  {% endif %}
+<div ref="priceContainer" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+  <div>
+    {% if show_sale_price_first == false and show_compare_price %}
+      <span role="group">
+        <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+        <span class="compare-at-price">{{- compare_at_price -}}</span>
+      </span>
+    {% endif %}
 
-  {% if show_compare_price %}
-    <span role="group">
-      <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+    {% if show_compare_price %}
+      <span role="group">
+        <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+        <span class="price">{{ price | default: '&nbsp;' }}</span>
+      </span>
+    {% else %}
       <span class="price">{{ price | default: '&nbsp;' }}</span>
-    </span>
-  {% else %}
-    <span class="price">{{ price | default: '&nbsp;' }}</span>
-  {% endif %}
+    {% endif %}
 
-  {% if show_sale_price_first == true and show_compare_price %}
-    <span role="group">
-      <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-      <span class="compare-at-price">{{- compare_at_price -}}</span>
-    </span>
-  {% endif %}
-  {%- if selected_variant.unit_price and show_unit_price %}
+    {% if show_sale_price_first == true and show_compare_price %}
+      <span role="group">
+        <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+        <span class="compare-at-price">{{- compare_at_price -}}</span>
+      </span>
+    {% endif %}
+    {%- if selected_variant.unit_price and show_unit_price %}
+      {%- liquid
+        if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
+          assign unit_price = selected_variant.unit_price | money_with_currency
+        elsif product.handle != closest.product.handle and settings.currency_code_enabled_product_cards
+          assign unit_price = selected_variant.unit_price | money_with_currency
+        else
+          assign unit_price = selected_variant.unit_price | money
+        endif
+      -%}
+      {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} 已售数量（仅在非产品详情页显示） {%- endcomment -%}
+  {%- if product_resource != blank and template.name != 'product' -%}
     {%- liquid
-      if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
-        assign unit_price = selected_variant.unit_price | money_with_currency
-      elsif product.handle != closest.product.handle and settings.currency_code_enabled_product_cards
-        assign unit_price = selected_variant.unit_price | money_with_currency
-      else
-        assign unit_price = selected_variant.unit_price | money
+      # 基准日期: 2025-01-01
+      assign base_date = '2025-01-01' | date: '%s'
+      assign today = 'now' | date: '%s'
+      assign days_diff = today | minus: base_date | divided_by: 86400
+
+      # 使用产品ID生成唯一的基础销量
+      assign product_id_str = product_resource.id | append: ''
+      assign last_digit = product_id_str | slice: -1, 1 | plus: 0
+      assign second_last = product_id_str | slice: -2, 1 | plus: 0
+      assign base_sold = last_digit | times: 50 | plus: second_last | times: 30 | plus: 200
+
+      # 每天递增0-10个（根据产品ID确定固定值）
+      assign daily_increment = last_digit | modulo: 11
+
+      # 计算总销量：base_sold + (days_diff * daily_increment)
+      assign incremental_sold = days_diff | times: daily_increment
+      assign total_sold = base_sold | plus: incremental_sold
+
+      # 限制在1000以内
+      if total_sold > 999
+        assign total_sold = 999
       endif
     -%}
-    {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
+    <span class="sold-count" style="font-size: 0.85em; color: #666; white-space: nowrap;">已售{{ total_sold }}</span>
   {%- endif -%}
 </div>
