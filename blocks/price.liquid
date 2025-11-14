@@ -53,6 +53,34 @@
     show_sale_price_first: block_settings.show_sale_price_first
   %}
 
+  {%- comment -%} 已售数量计算（仅在商品列表中显示） {%- endcomment -%}
+  {%- if product_resource != blank and section.type == 'product-list' -%}
+    {%- liquid
+      # 基准日期: 2025-01-01
+      assign base_date = '2025-01-01' | date: '%s'
+      assign today = 'now' | date: '%s'
+      assign days_diff = today | minus: base_date | divided_by: 86400
+
+      # 使用产品ID生成唯一的基础销量
+      assign product_id_str = product_resource.id | append: ''
+      assign last_digit = product_id_str | slice: -1, 1 | plus: 0
+      assign second_last = product_id_str | slice: -2, 1 | plus: 0
+      assign base_sold = last_digit | times: 50 | plus: second_last | times: 30 | plus: 200
+
+      # 每天递增3-7个（根据产品ID确定固定值）
+      assign daily_increment = last_digit | modulo: 5 | plus: 3
+
+      # 计算总销量
+      assign total_sold = base_sold | plus: days_diff | times: daily_increment
+
+      # 限制在1000以内
+      if total_sold > 999
+        assign total_sold = 999
+      endif
+    -%}
+    <span class="sold-count" style="margin-left: 8px; font-size: 0.85em; color: #666;">已售{{ total_sold }}</span>
+  {%- endif -%}
+
   {% if block_settings.show_tax_info %}
     <div class="tax-note">
       {%- if cart.duties_included and cart.taxes_included -%}
