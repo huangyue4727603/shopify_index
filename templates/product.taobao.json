@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "taobao-product",
+      "settings": {
+        "title_prefix": "官方推荐",
+        "price_label": "官方推荐价",
+        "promo_tag": "限时优惠",
+        "promo_text": "新用户首单立减10%",
+        "review_count": "500+",
+        "rating": "4.9",
+        "shop_name": "",
+        "color_scheme": "scheme-1"
+      },
+      "blocks": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

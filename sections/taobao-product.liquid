@@ -1,0 +1,983 @@
+{% comment %}
+  淘宝风格产品销售页面
+  Taobao-style product sales page
+{% endcomment %}
+
+{%- liquid
+  assign product = product | default: section.settings.product
+  if product == blank
+    assign product = collection.products.first
+  endif
+
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+
+  # 计算已售数量
+  assign product_id_str = product.id | append: ''
+  assign last_digit = product_id_str | slice: -1, 1 | plus: 0
+  assign second_last = product_id_str | slice: -2, 1 | plus: 0
+  assign third_last = product_id_str | slice: -3, 1 | plus: 0
+  assign fourth_last = product_id_str | slice: -4, 1 | plus: 0
+  assign today_day_of_year = 'now' | date: '%j' | plus: 0
+
+  assign part1 = last_digit | times: 80
+  assign part2 = second_last | times: 60
+  assign part3 = third_last | times: 40
+  assign part4 = fourth_last | times: 20
+  assign base_sold = part1 | plus: part2 | plus: part3 | plus: part4 | plus: 100
+
+  assign daily_base = last_digit | plus: 1
+  assign daily_increment = daily_base | modulo: 10 | plus: 1
+  assign yearly_increment = today_day_of_year | times: daily_increment
+  assign total_sold = base_sold | plus: yearly_increment
+
+  if total_sold > 9999
+    assign total_sold = 9999
+  endif
+-%}
+
+<div class="taobao-product-page color-{{ section.settings.color_scheme }}">
+  <!-- 商品图片区域 -->
+  <div class="taobao-gallery">
+    <div class="taobao-gallery__main">
+      {%- if featured_media -%}
+        <img
+          src="{{ featured_media | image_url: width: 800 }}"
+          alt="{{ featured_media.alt | escape }}"
+          loading="eager"
+          width="{{ featured_media.width }}"
+          height="{{ featured_media.height }}"
+          class="taobao-gallery__image"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    {%- if product.media.size > 1 -%}
+      <div class="taobao-gallery__thumbnails">
+        {%- for media in product.media limit: 5 -%}
+          <div class="taobao-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
+            <img
+              src="{{ media | image_url: width: 100 }}"
+              alt="{{ media.alt | escape }}"
+              loading="lazy"
+            >
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- 商品信息区域 -->
+  <div class="taobao-info">
+    <!-- 价格区域 -->
+    <div class="taobao-price-box">
+      <div class="taobao-price-label">{{ section.settings.price_label | default: '官方推荐价' }}</div>
+      <div class="taobao-price">
+        <span class="taobao-price__currency">{{ cart.currency.symbol }}</span>
+        <span class="taobao-price__amount">{{ current_variant.price | money_without_currency }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="taobao-price__original">{{ current_variant.compare_at_price | money }}</span>
+          <span class="taobao-price__discount">
+            {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+            省{{ discount }}%
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- 促销信息 -->
+    {%- if section.settings.promo_text != blank -%}
+      <div class="taobao-promo">
+        <span class="taobao-promo__tag">{{ section.settings.promo_tag | default: '限时优惠' }}</span>
+        <span class="taobao-promo__text">{{ section.settings.promo_text }}</span>
+      </div>
+    {%- endif -%}
+
+    <!-- 商品标题 -->
+    <h1 class="taobao-title">
+      {%- if section.settings.title_prefix != blank -%}
+        <span class="taobao-title__tag">{{ section.settings.title_prefix }}</span>
+      {%- endif -%}
+      {{ product.title }}
+    </h1>
+
+    <!-- 销量和评价 -->
+    <div class="taobao-stats">
+      <div class="taobao-stats__item">
+        <span class="taobao-stats__value">{{ total_sold }}</span>
+        <span class="taobao-stats__label">已售</span>
+      </div>
+      <div class="taobao-stats__divider"></div>
+      <div class="taobao-stats__item">
+        <span class="taobao-stats__value">{{ section.settings.review_count | default: '500+' }}</span>
+        <span class="taobao-stats__label">评价</span>
+      </div>
+      <div class="taobao-stats__divider"></div>
+      <div class="taobao-stats__item">
+        <span class="taobao-stats__value">{{ section.settings.rating | default: '4.9' }}</span>
+        <span class="taobao-stats__label">评分</span>
+      </div>
+    </div>
+
+    <!-- 服务承诺 -->
+    <div class="taobao-services">
+      <div class="taobao-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22,4 12,14.01 9,11.01"/>
+        </svg>
+        <span>正品保障</span>
+      </div>
+      <div class="taobao-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16,8 20,8 23,11 23,16 16,16"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        <span>全球包邮</span>
+      </div>
+      <div class="taobao-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>30天退换</span>
+      </div>
+    </div>
+
+    <!-- 规格选择 -->
+    {%- if product.has_only_default_variant == false -%}
+      <div class="taobao-variants">
+        {%- for option in product.options_with_values -%}
+          <div class="taobao-option">
+            <div class="taobao-option__label">{{ option.name }}</div>
+            <div class="taobao-option__values">
+              {%- for value in option.values -%}
+                <label class="taobao-option__value {% if option.selected_value == value %}selected{% endif %}">
+                  <input
+                    type="radio"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <span>{{ value }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <!-- 数量选择 -->
+    <div class="taobao-quantity">
+      <div class="taobao-quantity__label">数量</div>
+      <div class="taobao-quantity__controls">
+        <button type="button" class="taobao-quantity__btn minus">-</button>
+        <input type="number" class="taobao-quantity__input" value="1" min="1" max="{{ current_variant.inventory_quantity | default: 999 }}">
+        <button type="button" class="taobao-quantity__btn plus">+</button>
+      </div>
+      <span class="taobao-quantity__stock">库存充足</span>
+    </div>
+
+    <!-- 店铺信息 -->
+    <div class="taobao-shop">
+      <div class="taobao-shop__avatar">
+        <img src="{{ section.settings.shop_avatar | image_url: width: 60 }}" alt="{{ section.settings.shop_name }}" onerror="this.style.display='none'">
+      </div>
+      <div class="taobao-shop__info">
+        <div class="taobao-shop__name">{{ section.settings.shop_name | default: shop.name }}</div>
+        <div class="taobao-shop__badges">
+          <span class="taobao-shop__badge official">官方旗舰店</span>
+        </div>
+      </div>
+      <button type="button" class="taobao-shop__follow">关注店铺</button>
+    </div>
+  </div>
+
+  <!-- 商品详情 -->
+  <div class="taobao-details">
+    <div class="taobao-details__header">
+      <div class="taobao-details__tab active">商品详情</div>
+      <div class="taobao-details__tab">规格参数</div>
+      <div class="taobao-details__tab">售后服务</div>
+    </div>
+
+    <div class="taobao-details__content">
+      <div class="taobao-details__section">
+        {{ product.description }}
+      </div>
+
+      <!-- 商品图文详情 -->
+      {%- if section.settings.detail_images != blank -%}
+        <div class="taobao-details__images">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'detail_image' -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                alt="{{ block.settings.alt | escape }}"
+                loading="lazy"
+                class="taobao-details__image"
+              >
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- 固定底部购买栏 -->
+  <div class="taobao-bottom-bar">
+    <div class="taobao-bottom-bar__actions">
+      <button type="button" class="taobao-bottom-bar__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <span>首页</span>
+      </button>
+      <button type="button" class="taobao-bottom-bar__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span>购物车</span>
+      </button>
+    </div>
+
+    <div class="taobao-bottom-bar__buttons">
+      <product-form class="taobao-product-form">
+        {%- form 'product', product, id: 'taobao-product-form', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" value="1" class="taobao-quantity-value">
+
+          <button
+            type="button"
+            class="taobao-btn taobao-btn--cart"
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            加入购物车
+          </button>
+
+          <button
+            type="submit"
+            class="taobao-btn taobao-btn--buy"
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            {% if current_variant.available %}
+              立即购买
+            {% else %}
+              已售罄
+            {% endif %}
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .taobao-product-page {
+    --taobao-primary: #ff5000;
+    --taobao-secondary: #ff7d00;
+    --taobao-bg: #f5f5f5;
+    --taobao-card-bg: #ffffff;
+    --taobao-text: #333333;
+    --taobao-text-light: #666666;
+    --taobao-border: #e8e8e8;
+
+    background: var(--taobao-bg);
+    padding-bottom: 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* 图片区域 */
+  .taobao-gallery {
+    background: var(--taobao-card-bg);
+    margin-bottom: 10px;
+  }
+
+  .taobao-gallery__main {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .taobao-gallery__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .taobao-gallery__thumbnails {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    overflow-x: auto;
+  }
+
+  .taobao-gallery__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .taobao-gallery__thumb.active {
+    border-color: var(--taobao-primary);
+  }
+
+  .taobao-gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 商品信息 */
+  .taobao-info {
+    background: var(--taobao-card-bg);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+
+  .taobao-price-box {
+    background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .taobao-price-label {
+    font-size: 12px;
+    color: var(--taobao-primary);
+    margin-bottom: 4px;
+  }
+
+  .taobao-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .taobao-price__currency {
+    font-size: 18px;
+    color: var(--taobao-primary);
+    font-weight: 600;
+  }
+
+  .taobao-price__amount {
+    font-size: 32px;
+    color: var(--taobao-primary);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .taobao-price__original {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .taobao-price__discount {
+    background: var(--taobao-primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* 促销信息 */
+  .taobao-promo {
+    background: #fff8f0;
+    border: 1px solid #ffd6b3;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .taobao-promo__tag {
+    background: var(--taobao-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .taobao-promo__text {
+    font-size: 14px;
+    color: var(--taobao-primary);
+  }
+
+  /* 标题 */
+  .taobao-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--taobao-text);
+    line-height: 1.4;
+    margin: 0 0 12px;
+  }
+
+  .taobao-title__tag {
+    display: inline-block;
+    background: var(--taobao-primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* 统计信息 */
+  .taobao-stats {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--taobao-border);
+    border-bottom: 1px solid var(--taobao-border);
+    margin-bottom: 12px;
+  }
+
+  .taobao-stats__item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .taobao-stats__value {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--taobao-text);
+  }
+
+  .taobao-stats__label {
+    font-size: 12px;
+    color: var(--taobao-text-light);
+  }
+
+  .taobao-stats__divider {
+    width: 1px;
+    height: 30px;
+    background: var(--taobao-border);
+  }
+
+  /* 服务承诺 */
+  .taobao-services {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .taobao-service {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--taobao-text-light);
+  }
+
+  .taobao-service svg {
+    color: var(--taobao-primary);
+  }
+
+  /* 规格选择 */
+  .taobao-variants {
+    margin-bottom: 12px;
+  }
+
+  .taobao-option {
+    margin-bottom: 12px;
+  }
+
+  .taobao-option__label {
+    font-size: 14px;
+    color: var(--taobao-text);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .taobao-option__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .taobao-option__value {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .taobao-option__value input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .taobao-option__value span {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--taobao-border);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .taobao-option__value.selected span,
+  .taobao-option__value input:checked + span {
+    border-color: var(--taobao-primary);
+    color: var(--taobao-primary);
+    background: #fff5f0;
+  }
+
+  /* 数量选择 */
+  .taobao-quantity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .taobao-quantity__label {
+    font-size: 14px;
+    color: var(--taobao-text);
+    font-weight: 500;
+  }
+
+  .taobao-quantity__controls {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--taobao-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .taobao-quantity__btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f5f5f5;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .taobao-quantity__btn:hover {
+    background: #e8e8e8;
+  }
+
+  .taobao-quantity__input {
+    width: 50px;
+    height: 32px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    -moz-appearance: textfield;
+  }
+
+  .taobao-quantity__input::-webkit-inner-spin-button,
+  .taobao-quantity__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .taobao-quantity__stock {
+    font-size: 12px;
+    color: #52c41a;
+  }
+
+  /* 店铺信息 */
+  .taobao-shop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+  }
+
+  .taobao-shop__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--taobao-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .taobao-shop__info {
+    flex: 1;
+  }
+
+  .taobao-shop__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--taobao-text);
+    margin-bottom: 4px;
+  }
+
+  .taobao-shop__badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .taobao-shop__badge.official {
+    background: #ff5000;
+    color: white;
+  }
+
+  .taobao-shop__follow {
+    padding: 6px 16px;
+    border: 1px solid var(--taobao-primary);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--taobao-primary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .taobao-shop__follow:hover {
+    background: var(--taobao-primary);
+    color: white;
+  }
+
+  /* 商品详情 */
+  .taobao-details {
+    background: var(--taobao-card-bg);
+    margin-bottom: 10px;
+  }
+
+  .taobao-details__header {
+    display: flex;
+    border-bottom: 1px solid var(--taobao-border);
+  }
+
+  .taobao-details__tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--taobao-text-light);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .taobao-details__tab.active {
+    color: var(--taobao-primary);
+    font-weight: 600;
+  }
+
+  .taobao-details__tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--taobao-primary);
+  }
+
+  .taobao-details__content {
+    padding: 16px;
+  }
+
+  .taobao-details__section {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--taobao-text);
+  }
+
+  .taobao-details__image {
+    width: 100%;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* 固定底部栏 */
+  .taobao-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--taobao-card-bg);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .taobao-bottom-bar__actions {
+    display: flex;
+    gap: 16px;
+    margin-right: 16px;
+  }
+
+  .taobao-bottom-bar__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: var(--taobao-text-light);
+    font-size: 10px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .taobao-bottom-bar__buttons {
+    flex: 1;
+    display: flex;
+    gap: 0;
+  }
+
+  .taobao-product-form {
+    display: flex;
+    flex: 1;
+  }
+
+  .taobao-product-form form {
+    display: flex;
+    flex: 1;
+    gap: 0;
+  }
+
+  .taobao-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .taobao-btn--cart {
+    background: var(--taobao-secondary);
+    color: white;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .taobao-btn--buy {
+    background: var(--taobao-primary);
+    color: white;
+    border-radius: 0 20px 20px 0;
+  }
+
+  .taobao-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .taobao-btn:not(:disabled):hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* 响应式 */
+  @media (min-width: 768px) {
+    .taobao-product-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .taobao-gallery {
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .taobao-details {
+      grid-column: 1 / -1;
+    }
+
+    .taobao-bottom-bar {
+      position: sticky;
+      bottom: 20px;
+      border-radius: 12px;
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 图片切换
+    const thumbnails = document.querySelectorAll('.taobao-gallery__thumb');
+    const mainImage = document.querySelector('.taobao-gallery__image');
+
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        thumbnails.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const newSrc = this.querySelector('img').src.replace('width=100', 'width=800');
+        mainImage.src = newSrc;
+      });
+    });
+
+    // 数量控制
+    const minusBtn = document.querySelector('.taobao-quantity__btn.minus');
+    const plusBtn = document.querySelector('.taobao-quantity__btn.plus');
+    const quantityInput = document.querySelector('.taobao-quantity__input');
+    const hiddenQuantity = document.querySelector('.taobao-quantity-value');
+
+    minusBtn?.addEventListener('click', function() {
+      const current = parseInt(quantityInput.value) || 1;
+      if (current > 1) {
+        quantityInput.value = current - 1;
+        hiddenQuantity.value = current - 1;
+      }
+    });
+
+    plusBtn?.addEventListener('click', function() {
+      const current = parseInt(quantityInput.value) || 1;
+      const max = parseInt(quantityInput.max) || 999;
+      if (current < max) {
+        quantityInput.value = current + 1;
+        hiddenQuantity.value = current + 1;
+      }
+    });
+
+    quantityInput?.addEventListener('change', function() {
+      hiddenQuantity.value = this.value;
+    });
+
+    // 加入购物车
+    const cartBtn = document.querySelector('.taobao-btn--cart');
+    cartBtn?.addEventListener('click', function() {
+      const form = document.getElementById('taobao-product-form');
+      const formData = new FormData(form);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('已加入购物车！');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "淘宝风格产品页",
+  "tag": "section",
+  "class": "taobao-product-section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "选择产品"
+    },
+    {
+      "type": "text",
+      "id": "title_prefix",
+      "label": "标题前缀标签",
+      "default": "官方推荐"
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "价格标签",
+      "default": "官方推荐价"
+    },
+    {
+      "type": "text",
+      "id": "promo_tag",
+      "label": "促销标签",
+      "default": "限时优惠"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "促销文案",
+      "default": "新用户首单立减10%"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "评价数量",
+      "default": "500+"
+    },
+    {
+      "type": "text",
+      "id": "rating",
+      "label": "评分",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "shop_name",
+      "label": "店铺名称"
+    },
+    {
+      "type": "image_picker",
+      "id": "shop_avatar",
+      "label": "店铺头像"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "detail_image",
+      "name": "详情图片",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "图片"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "图片描述"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "淘宝风格产品页",
+      "category": "产品"
+    }
+  ]
+}
+{% endschema %}
