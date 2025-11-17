@@ -1360,7 +1360,7 @@
               "type": "button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/all",
+                "link": "shopify://collections/项链和吊坠",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
@@ -1459,7 +1459,7 @@
               "type": "button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/all",
+                "link": "shopify://collections/手镯",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
@@ -2001,14 +2001,6 @@
         "padding-block-end": 48
       }
     },
-    "reviews_section_homepage": {
-      "type": "reviews-section",
-      "settings": {
-        "reviews_count": 99,
-        "show_load_more": true,
-        "load_more_text": "显示更多评论"
-      }
-    },
     "section_4Na3BA": {
       "type": "section",
       "blocks": {
@@ -2177,6 +2169,14 @@
         "gradient_direction": "to top",
         "padding-block-start": 40,
         "padding-block-end": 40
+      }
+    },
+    "reviews_section_homepage": {
+      "type": "reviews-section",
+      "settings": {
+        "reviews_count": 99,
+        "show_load_more": true,
+        "load_more_text": "显示更多评论"
       }
     }
   },
