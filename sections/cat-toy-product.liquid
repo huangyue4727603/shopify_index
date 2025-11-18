@@ -773,6 +773,13 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // 版本信息
+    console.log('%c Cat Toy Product Page ', 'background: #ff6b35; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
+    console.log('%c Version: 1.2.0 ', 'background: #333; color: white; padding: 2px 6px; border-radius: 2px;');
+    console.log('%c Last Updated: 2025-11-18 ', 'background: #666; color: white; padding: 2px 6px; border-radius: 2px;');
+    console.log('%c Features: SKU Image Linking, Dynamic Cart Operations ', 'background: #52c41a; color: white; padding: 2px 6px; border-radius: 2px;');
+    console.log('---');
+
     // 输出调试信息
     const debugInfo = document.getElementById('product-debug-info');
     if (debugInfo) {
@@ -846,10 +853,24 @@
     // 规格选择变化时更新variant ID和图片
     const variantLabels = document.querySelectorAll('.cat-toy-option__value');
     const variantIdInput = document.querySelector('.cat-toy-variant-id');
-    const mainImage = document.querySelector('.cat-toy-gallery__image');
 
-    variantLabels.forEach(label => {
-      label.addEventListener('click', function() {
+    console.log('=== SKU Setup ===');
+    console.log('Found variant labels:', variantLabels.length);
+    console.log('Variant ID input:', variantIdInput);
+    console.log('Main image element:', mainImage);
+
+    variantLabels.forEach((label, index) => {
+      console.log(`Label ${index}:`, {
+        variantId: label.dataset.variantId,
+        variantImage: label.dataset.variantImage,
+        variantMediaId: label.dataset.variantMediaId,
+        text: label.textContent.trim()
+      });
+
+      label.addEventListener('click', function(e) {
+        console.log('=== SKU Clicked ===');
+        console.log('Clicked label:', this.textContent.trim());
+
         // 移除所有selected类
         document.querySelectorAll('.cat-toy-option__value').forEach(l => {
           l.classList.remove('selected');
@@ -863,34 +884,46 @@
         const variantImage = this.dataset.variantImage;
         const variantMediaId = this.dataset.variantMediaId;
 
-        // 更新隐藏的variant ID输入
-        if (variantId && variantIdInput) {
-          variantIdInput.value = variantId;
-        }
-
-        // 切换主图片
-        if (variantImage && mainImage) {
-          mainImage.src = variantImage;
-          mainImage.setAttribute('loading', 'eager');
-
-          // 同时更新缩略图的active状态
-          if (variantMediaId) {
-            const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
-            thumbnails.forEach(thumb => {
-              const mediaId = thumb.dataset.mediaId;
-              if (mediaId == variantMediaId) {
-                thumbnails.forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-              }
-            });
-          }
-        }
-
-        console.log('Variant changed:', {
+        console.log('Variant data:', {
           id: variantId,
           image: variantImage,
           mediaId: variantMediaId
         });
+
+        // 更新隐藏的variant ID输入
+        if (variantId && variantIdInput) {
+          variantIdInput.value = variantId;
+          console.log('Updated variant ID input to:', variantId);
+        }
+
+        // 切换主图片
+        const mainImageNow = document.querySelector('.cat-toy-gallery__image');
+        if (variantImage && mainImageNow) {
+          console.log('Changing image from:', mainImageNow.src);
+          console.log('Changing image to:', variantImage);
+          mainImageNow.src = variantImage;
+          mainImageNow.setAttribute('loading', 'eager');
+
+          // 同时更新缩略图的active状态
+          if (variantMediaId) {
+            const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
+            console.log('Found thumbnails:', thumbnails.length);
+            thumbnails.forEach(thumb => {
+              const mediaId = thumb.dataset.mediaId;
+              console.log('Checking thumbnail mediaId:', mediaId, 'against', variantMediaId);
+              if (mediaId == variantMediaId) {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                console.log('Activated thumbnail for media ID:', mediaId);
+              }
+            });
+          }
+        } else {
+          console.log('Cannot change image:', {
+            hasImage: !!variantImage,
+            hasMainImage: !!mainImageNow
+          });
+        }
       });
     });
 
