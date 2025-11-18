@@ -5,23 +5,22 @@
 
 {%- liquid
   # 优先使用section设置中选择的产品
-  assign product = section.settings.product
-
-  # 如果没有设置产品，则使用当前页面的产品
-  if product == blank
-    assign product = product
+  if section.settings.product != blank
+    assign selected_product = section.settings.product
+  else
+    assign selected_product = product
   endif
 
   # 如果仍然为空，使用collection中的第一个产品
-  if product == blank
-    assign product = collection.products.first
+  if selected_product == blank
+    assign selected_product = collection.products.first
   endif
 
-  assign current_variant = product.selected_or_first_available_variant
-  assign featured_media = current_variant.featured_media | default: product.featured_media
+  assign current_variant = selected_product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: selected_product.featured_media
 
   # 计算已售数量
-  assign product_id_str = product.id | append: ''
+  assign product_id_str = selected_product.id | append: ''
   assign last_digit = product_id_str | slice: -1, 1 | plus: 0
   assign second_last = product_id_str | slice: -2, 1 | plus: 0
   assign third_last = product_id_str | slice: -3, 1 | plus: 0
@@ -62,9 +61,9 @@
       {%- endif -%}
     </div>
 
-    {%- if product.media.size > 1 -%}
+    {%- if selected_product.media.size > 1 -%}
       <div class="taobao-gallery__thumbnails">
-        {%- for media in product.media limit: 5 -%}
+        {%- for media in selected_product.media limit: 5 -%}
           <div class="taobao-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
             <img
               src="{{ media | image_url: width: 100 }}"
@@ -108,7 +107,7 @@
       {%- if section.settings.title_prefix != blank -%}
         <span class="taobao-title__tag">{{ section.settings.title_prefix }}</span>
       {%- endif -%}
-      {{ product.title }}
+      {{ selected_product.title }}
     </h1>
 
     <!-- 销量和评价 -->
@@ -157,9 +156,9 @@
     </div>
 
     <!-- 规格选择 -->
-    {%- if product.has_only_default_variant == false -%}
+    {%- if selected_product.has_only_default_variant == false -%}
       <div class="taobao-variants">
-        {%- for option in product.options_with_values -%}
+        {%- for option in selected_product.options_with_values -%}
           <div class="taobao-option">
             <div class="taobao-option__label">{{ option.name }}</div>
             <div class="taobao-option__values">
@@ -203,7 +202,7 @@
 
     <div class="taobao-details__content">
       <div class="taobao-details__section">
-        {{ product.description }}
+        {{ selected_product.description }}
       </div>
 
       <!-- 商品图文详情 -->
@@ -246,7 +245,7 @@
 
     <div class="taobao-bottom-bar__buttons">
       <product-form class="taobao-product-form">
-        {%- form 'product', product, id: 'taobao-product-form', novalidate: 'novalidate' -%}
+        {%- form 'product', selected_product, id: 'taobao-product-form', novalidate: 'novalidate' -%}
           <input type="hidden" name="id" value="{{ current_variant.id }}">
           <input type="hidden" name="quantity" value="1" class="taobao-quantity-value">
 
