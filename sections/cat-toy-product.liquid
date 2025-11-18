@@ -7,19 +7,6 @@
   assign current_variant = product.selected_or_first_available_variant
   assign featured_media = current_variant.featured_media | default: product.featured_media
 
-  # Debug: 输出产品variants信息
-  comment
-    Product ID: {{ product.id }}
-    Product Variants Count: {{ product.variants.size }}
-    {% for variant in product.variants %}
-      Variant {{ forloop.index }}:
-      - ID: {{ variant.id }}
-      - Title: {{ variant.title }}
-      - Featured Media ID: {{ variant.featured_media.id }}
-      - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}
-    {% endfor %}
-  endcomment
-
   # 计算已售数量
   assign product_id_str = product.id | append: ''
   assign last_digit = product_id_str | slice: -1, 1 | plus: 0
@@ -45,24 +32,6 @@
 -%}
 
 <div class="cat-toy-page color-{{ section.settings.color_scheme }}">
-
-  <!-- Debug Info -->
-  <div style="display:none;" id="product-debug-info">
-    Product ID: {{ product.id }}<br>
-    Variants Count: {{ product.variants.size }}<br>
-    {% for variant in product.variants %}
-      Variant {{ forloop.index }}:<br>
-      - ID: {{ variant.id }}<br>
-      - Title: {{ variant.title }}<br>
-      - Option1: {{ variant.option1 }}<br>
-      - Featured Media ID: {{ variant.featured_media.id }}<br>
-      {% if variant.featured_media %}
-        - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}<br>
-      {% endif %}
-      <br>
-    {% endfor %}
-  </div>
-
   <!-- 商品图片区域 -->
   <div class="cat-toy-gallery">
     <div class="cat-toy-gallery__main">
@@ -87,8 +56,6 @@
             <img
               src="{{ media | image_url: width: 100 }}"
               alt="{{ media.alt | escape }}"
-              width="100"
-              height="100"
               loading="lazy"
             >
           </div>
@@ -101,7 +68,7 @@
   <div class="cat-toy-info">
     <!-- 价格区域 -->
     <div class="cat-toy-price-box">
-      <div class="cat-toy-price-label">{{ section.settings.price_label | default: '限时优惠' }}</div>
+      <div class="cat-toy-price-label">{{ section.settings.price_label | default: '限时特惠价' }}</div>
       <div class="cat-toy-price">
         <span class="cat-toy-price__currency">{{ cart.currency.symbol }}</span>
         <span class="cat-toy-price__amount">{{ current_variant.price | money_without_currency }}</span>
@@ -176,21 +143,7 @@
             <div class="cat-toy-option__label">{{ option.name }}</div>
             <div class="cat-toy-option__values">
               {%- for value in option.values -%}
-                {%- assign variant_for_value = null -%}
-                {%- for variant in product.variants -%}
-                  {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
-                    {%- assign variant_for_value = variant -%}
-                    {%- break -%}
-                  {%- endif -%}
-                {%- endfor -%}
-
-                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}"
-                  data-variant-id="{{ variant_for_value.id }}"
-                  {% if variant_for_value.featured_media %}
-                  data-variant-image="{{ variant_for_value.featured_media | image_url: width: 800 }}"
-                  data-variant-media-id="{{ variant_for_value.featured_media.id }}"
-                  {% endif %}
-                >
+                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}">
                   <input
                     type="radio"
                     name="{{ option.name }}"
@@ -775,43 +728,6 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // 版本信息
-    console.log('%c Cat Toy Product Page ', 'background: #ff6b35; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
-    console.log('%c Version: 1.2.2 ', 'background: #333; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('%c Last Updated: 2025-11-18 23:45 ', 'background: #666; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('%c Branch: 1114 | Test: 限时优惠 ', 'background: #52c41a; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('---');
-
-    // 输出调试信息
-    const debugInfo = document.getElementById('product-debug-info');
-    if (debugInfo) {
-      console.log('=== Product Debug Info ===');
-      console.log(debugInfo.innerHTML);
-    }
-
-    // 创建variants数据映射
-    const variantsData = [
-      {% for variant in product.variants %}
-      {
-        id: {{ variant.id }},
-        title: "{{ variant.title | escape }}",
-        option1: "{{ variant.option1 | escape }}",
-        {% if variant.featured_media %}
-        featuredMediaId: {{ variant.featured_media.id }},
-        featuredMediaUrl: "{{ variant.featured_media | image_url: width: 800 }}",
-        featuredMediaThumb: "{{ variant.featured_media | image_url: width: 100 }}"
-        {% else %}
-        featuredMediaId: null,
-        featuredMediaUrl: null,
-        featuredMediaThumb: null
-        {% endif %}
-      }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ];
-
-    console.log('=== Variants Data ===');
-    console.log(variantsData);
-
     // 图片切换
     const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
     const mainImage = document.querySelector('.cat-toy-gallery__image');
@@ -852,80 +768,19 @@
       hiddenQuantity.value = this.value;
     });
 
-    // 规格选择变化时更新variant ID和图片
-    const variantLabels = document.querySelectorAll('.cat-toy-option__value');
+    // 规格选择变化时更新variant ID
+    const variantInputs = document.querySelectorAll('.cat-toy-option__value input');
     const variantIdInput = document.querySelector('.cat-toy-variant-id');
 
-    console.log('=== SKU Setup ===');
-    console.log('Found variant labels:', variantLabels.length);
-    console.log('Variant ID input:', variantIdInput);
-    console.log('Main image element:', mainImage);
+    variantInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        // 获取所有选中的规格值
+        const selectedOptions = Array.from(document.querySelectorAll('.cat-toy-option__value input:checked'))
+          .map(input => input.value);
 
-    variantLabels.forEach((label, index) => {
-      console.log(`Label ${index}:`, {
-        variantId: label.dataset.variantId,
-        variantImage: label.dataset.variantImage,
-        variantMediaId: label.dataset.variantMediaId,
-        text: label.textContent.trim()
-      });
-
-      label.addEventListener('click', function(e) {
-        console.log('=== SKU Clicked ===');
-        console.log('Clicked label:', this.textContent.trim());
-
-        // 移除所有selected类
-        document.querySelectorAll('.cat-toy-option__value').forEach(l => {
-          l.classList.remove('selected');
-        });
-
-        // 添加selected类到当前点击的label
-        this.classList.add('selected');
-
-        // 获取variant信息
-        const variantId = this.dataset.variantId;
-        const variantImage = this.dataset.variantImage;
-        const variantMediaId = this.dataset.variantMediaId;
-
-        console.log('Variant data:', {
-          id: variantId,
-          image: variantImage,
-          mediaId: variantMediaId
-        });
-
-        // 更新隐藏的variant ID输入
-        if (variantId && variantIdInput) {
-          variantIdInput.value = variantId;
-          console.log('Updated variant ID input to:', variantId);
-        }
-
-        // 切换主图片
-        const mainImageNow = document.querySelector('.cat-toy-gallery__image');
-        if (variantImage && mainImageNow) {
-          console.log('Changing image from:', mainImageNow.src);
-          console.log('Changing image to:', variantImage);
-          mainImageNow.src = variantImage;
-          mainImageNow.setAttribute('loading', 'eager');
-
-          // 同时更新缩略图的active状态
-          if (variantMediaId) {
-            const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
-            console.log('Found thumbnails:', thumbnails.length);
-            thumbnails.forEach(thumb => {
-              const mediaId = thumb.dataset.mediaId;
-              console.log('Checking thumbnail mediaId:', mediaId, 'against', variantMediaId);
-              if (mediaId == variantMediaId) {
-                thumbnails.forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-                console.log('Activated thumbnail for media ID:', mediaId);
-              }
-            });
-          }
-        } else {
-          console.log('Cannot change image:', {
-            hasImage: !!variantImage,
-            hasMainImage: !!mainImageNow
-          });
-        }
+        // 在这里你需要找到对应的variant ID
+        // 暂时使用当前的variant ID
+        console.log('Selected options:', selectedOptions);
       });
     });
 
