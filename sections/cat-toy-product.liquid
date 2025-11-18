@@ -82,14 +82,6 @@
       </div>
     </div>
 
-    <!-- 促销信息 -->
-    {%- if section.settings.promo_text != blank -%}
-      <div class="cat-toy-promo">
-        <span class="cat-toy-promo__tag">{{ section.settings.promo_tag | default: '限时特惠' }}</span>
-        <span class="cat-toy-promo__text">{{ section.settings.promo_text }}</span>
-      </div>
-    {%- endif -%}
-
     <!-- 商品标题 -->
     <h1 class="cat-toy-title">
       {%- if section.settings.title_prefix != blank -%}
