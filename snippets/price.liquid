@@ -114,6 +114,6 @@
         assign total_sold = 9999
       endif
     -%}
-    <span class="sold-count" style="font-size: 0.85em; color: #666; white-space: nowrap;">已售{{ total_sold }}</span>
+    <span class="sold-count" style="font-size: 0.85em; color: #666; white-space: nowrap;">{{ 'content.sold_count' | t: count: total_sold }}</span>
   {%- endif -%}
 </div>
