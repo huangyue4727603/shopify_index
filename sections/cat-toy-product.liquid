@@ -7,6 +7,19 @@
   assign current_variant = product.selected_or_first_available_variant
   assign featured_media = current_variant.featured_media | default: product.featured_media
 
+  # Debug: 输出产品variants信息
+  comment
+    Product ID: {{ product.id }}
+    Product Variants Count: {{ product.variants.size }}
+    {% for variant in product.variants %}
+      Variant {{ forloop.index }}:
+      - ID: {{ variant.id }}
+      - Title: {{ variant.title }}
+      - Featured Media ID: {{ variant.featured_media.id }}
+      - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}
+    {% endfor %}
+  endcomment
+
   # 计算已售数量
   assign product_id_str = product.id | append: ''
   assign last_digit = product_id_str | slice: -1, 1 | plus: 0
@@ -32,6 +45,24 @@
 -%}
 
 <div class="cat-toy-page color-{{ section.settings.color_scheme }}">
+
+  <!-- Debug Info -->
+  <div style="display:none;" id="product-debug-info">
+    Product ID: {{ product.id }}<br>
+    Variants Count: {{ product.variants.size }}<br>
+    {% for variant in product.variants %}
+      Variant {{ forloop.index }}:<br>
+      - ID: {{ variant.id }}<br>
+      - Title: {{ variant.title }}<br>
+      - Option1: {{ variant.option1 }}<br>
+      - Featured Media ID: {{ variant.featured_media.id }}<br>
+      {% if variant.featured_media %}
+        - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}<br>
+      {% endif %}
+      <br>
+    {% endfor %}
+  </div>
+
   <!-- 商品图片区域 -->
   <div class="cat-toy-gallery">
     <div class="cat-toy-gallery__main">
@@ -728,6 +759,36 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // 输出调试信息
+    const debugInfo = document.getElementById('product-debug-info');
+    if (debugInfo) {
+      console.log('=== Product Debug Info ===');
+      console.log(debugInfo.innerHTML);
+    }
+
+    // 创建variants数据映射
+    const variantsData = [
+      {% for variant in product.variants %}
+      {
+        id: {{ variant.id }},
+        title: "{{ variant.title | escape }}",
+        option1: "{{ variant.option1 | escape }}",
+        {% if variant.featured_media %}
+        featuredMediaId: {{ variant.featured_media.id }},
+        featuredMediaUrl: "{{ variant.featured_media | image_url: width: 800 }}",
+        featuredMediaThumb: "{{ variant.featured_media | image_url: width: 100 }}"
+        {% else %}
+        featuredMediaId: null,
+        featuredMediaUrl: null,
+        featuredMediaThumb: null
+        {% endif %}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+
+    console.log('=== Variants Data ===');
+    console.log(variantsData);
+
     // 图片切换
     const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
     const mainImage = document.querySelector('.cat-toy-gallery__image');
