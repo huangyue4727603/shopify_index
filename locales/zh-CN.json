@@ -230,7 +230,8 @@
     "recipient_form_error": "提交表单时出现错误",
     "product_custom_property_character_count": "已输入 {{ used_chars }} 个字符，最多 {{ max_chars }} 个",
     "terms_and_policies": "条款和政策",
-    "sold_count": "已售{{ count }}"
+    "sold_count": "已售{{ count }}",
+    "featured_reviews": "精选评论"
   },
   "gift_cards": {
     "issued": {

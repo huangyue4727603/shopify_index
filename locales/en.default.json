@@ -250,7 +250,8 @@
     "recipient_form_fields_hidden": "Recipient form fields are now hidden",
     "recipient_form_error": "There was an error with the form submission",
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} characters used",
-    "sold_count": "Sold {{ count }}"
+    "sold_count": "Sold {{ count }}",
+    "featured_reviews": "Featured Reviews"
   },
   "fields": {
     "separator": "to"
