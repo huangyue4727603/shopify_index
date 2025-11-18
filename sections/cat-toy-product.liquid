@@ -3,8 +3,8 @@
   猫玩具产品详情页 - 淘宝风格
   Cat Toy Product Page - Taobao Style
   ============================================
-  Version: 1.3.1-1114
-  Last Updated: 2025-11-19 00:30
+  Version: 1.3.2-1114
+  Last Updated: 2025-11-19 00:35
   Branch: 1114
   ============================================
   Features:
@@ -189,6 +189,7 @@
 
                 <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}"
                   data-variant-id="{{ variant_for_value.id }}"
+                  data-variant-price="{{ variant_for_value.price | money_without_currency }}"
                   {% if variant_for_value.featured_media %}
                   data-variant-image="{{ variant_for_value.featured_media | image_url: width: 800 }}"
                   data-variant-media-id="{{ variant_for_value.featured_media.id }}"
@@ -778,19 +779,22 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // 版本信息
-    console.log('%c Cat Toy Product Page ', 'background: #ff6b35; color: white; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
-    console.log('%c Version: 1.3.1-1114 ', 'background: #333; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('%c Last Updated: 2025-11-19 00:30 ', 'background: #666; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('%c Branch: 1114 | SKU Image Linking Ready ', 'background: #52c41a; color: white; padding: 2px 6px; border-radius: 2px;');
-    console.log('---');
+    // 版本信息 (按F12查看完整日志)
+    const DEBUG = false; // 设置为true显示详细日志
 
-    // 输出产品Variants调试信息
-    const debugInfo = document.getElementById('product-debug-info');
-    if (debugInfo) {
-      console.log('%c Product Debug Info ', 'background: #1890ff; color: white; font-weight: bold; padding: 2px 6px;');
-      console.log(debugInfo.innerHTML);
-    }
+    console.log('%c Cat Toy Product v1.3.2-1114 ', 'background: #ff6b35; color: white; font-weight: bold; padding: 2px 6px;');
+
+    // 预加载所有variant图片
+    const variantImages = [];
+    document.querySelectorAll('.cat-toy-option__value[data-variant-image]').forEach(label => {
+      const imgUrl = label.dataset.variantImage;
+      if (imgUrl && !variantImages.includes(imgUrl)) {
+        const img = new Image();
+        img.src = imgUrl;
+        variantImages.push(imgUrl);
+      }
+    });
+    if (DEBUG) console.log('Preloaded images:', variantImages.length);
 
     // 图片切换
     const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
@@ -836,23 +840,20 @@
     const variantLabels = document.querySelectorAll('.cat-toy-option__value');
     const variantIdInput = document.querySelector('.cat-toy-variant-id');
 
-    console.log('=== SKU Setup ===');
-    console.log('Found variant labels:', variantLabels.length);
-    console.log('Variant ID input:', variantIdInput);
-    console.log('Main image element:', mainImage);
+    if (DEBUG) {
+      console.log('=== SKU Setup ===');
+      console.log('Found variant labels:', variantLabels.length);
+    }
 
     variantLabels.forEach((label, index) => {
-      console.log(`Label ${index}:`, {
-        variantId: label.dataset.variantId,
-        variantImage: label.dataset.variantImage,
-        variantMediaId: label.dataset.variantMediaId,
-        text: label.textContent.trim()
-      });
+      if (DEBUG) {
+        console.log(`Label ${index}:`, {
+          variantId: label.dataset.variantId,
+          text: label.textContent.trim()
+        });
+      }
 
       label.addEventListener('click', function(e) {
-        console.log('=== SKU Clicked ===');
-        console.log('Clicked label:', this.textContent.trim());
-
         // 移除所有selected类
         document.querySelectorAll('.cat-toy-option__value').forEach(l => {
           l.classList.remove('selected');
@@ -865,43 +866,40 @@
         const variantId = this.dataset.variantId;
         const variantImage = this.dataset.variantImage;
         const variantMediaId = this.dataset.variantMediaId;
+        const variantPrice = this.dataset.variantPrice;
 
-        console.log('Variant data:', {
-          id: variantId,
-          image: variantImage,
-          mediaId: variantMediaId
-        });
-
-        // 更新隐藏的variant ID输入
+        // 更新隐藏的variant ID输入 (购物车会使用这个ID)
         if (variantId && variantIdInput) {
           variantIdInput.value = variantId;
-          console.log('Updated variant ID input to:', variantId);
         }
 
-        // 切换主图片
+        // 更新显示的价格
+        if (variantPrice) {
+          const priceElement = document.querySelector('.cat-toy-price__amount');
+          if (priceElement) {
+            priceElement.textContent = variantPrice;
+          }
+        }
+
+        // 快速切换主图片
         const mainImageNow = document.querySelector('.cat-toy-gallery__image');
         if (variantImage && mainImageNow) {
-          console.log('Changing image from:', mainImageNow.src);
-          console.log('Changing image to:', variantImage);
+          // 直接设置src,图片已预加载
           mainImageNow.src = variantImage;
-          mainImageNow.setAttribute('loading', 'eager');
 
           // 同时更新缩略图的active状态
           if (variantMediaId) {
             const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
-            console.log('Found thumbnails:', thumbnails.length);
             thumbnails.forEach(thumb => {
               const mediaId = thumb.dataset.mediaId;
-              console.log('Checking thumbnail mediaId:', mediaId, 'against', variantMediaId);
               if (mediaId == variantMediaId) {
                 thumbnails.forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
-                console.log('Activated thumbnail for media ID:', mediaId);
               }
             });
           }
-        } else {
-          console.log('Cannot change image:', {
+        } else if (DEBUG) {
+          console.error('Cannot change image:', {
             hasImage: !!variantImage,
             hasMainImage: !!mainImageNow
           });
