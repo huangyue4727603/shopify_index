@@ -1,26 +1,14 @@
 {% comment %}
-  淘宝风格产品销售页面
-  Taobao-style product sales page
+  猫玩具产品详情页 - 淘宝风格
+  Cat Toy Product Page - Taobao Style
 {% endcomment %}
 
 {%- liquid
-  # 优先使用section设置中选择的产品
-  if section.settings.product != blank
-    assign selected_product = section.settings.product
-  else
-    assign selected_product = product
-  endif
-
-  # 如果仍然为空，使用collection中的第一个产品
-  if selected_product == blank
-    assign selected_product = collection.products.first
-  endif
-
-  assign current_variant = selected_product.selected_or_first_available_variant
-  assign featured_media = current_variant.featured_media | default: selected_product.featured_media
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
 
   # 计算已售数量
-  assign product_id_str = selected_product.id | append: ''
+  assign product_id_str = product.id | append: ''
   assign last_digit = product_id_str | slice: -1, 1 | plus: 0
   assign second_last = product_id_str | slice: -2, 1 | plus: 0
   assign third_last = product_id_str | slice: -3, 1 | plus: 0
@@ -43,10 +31,10 @@
   endif
 -%}
 
-<div class="taobao-product-page color-{{ section.settings.color_scheme }}">
+<div class="cat-toy-page color-{{ section.settings.color_scheme }}">
   <!-- 商品图片区域 -->
-  <div class="taobao-gallery">
-    <div class="taobao-gallery__main">
+  <div class="cat-toy-gallery">
+    <div class="cat-toy-gallery__main">
       {%- if featured_media -%}
         <img
           src="{{ featured_media | image_url: width: 800 }}"
@@ -54,17 +42,17 @@
           loading="eager"
           width="{{ featured_media.width }}"
           height="{{ featured_media.height }}"
-          class="taobao-gallery__image"
+          class="cat-toy-gallery__image"
         >
       {%- else -%}
         {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {%- endif -%}
     </div>
 
-    {%- if selected_product.media.size > 1 -%}
-      <div class="taobao-gallery__thumbnails">
-        {%- for media in selected_product.media limit: 5 -%}
-          <div class="taobao-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
+    {%- if product.media.size > 1 -%}
+      <div class="cat-toy-gallery__thumbnails">
+        {%- for media in product.media limit: 5 -%}
+          <div class="cat-toy-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
             <img
               src="{{ media | image_url: width: 100 }}"
               alt="{{ media.alt | escape }}"
@@ -77,16 +65,16 @@
   </div>
 
   <!-- 商品信息区域 -->
-  <div class="taobao-info">
+  <div class="cat-toy-info">
     <!-- 价格区域 -->
-    <div class="taobao-price-box">
-      <div class="taobao-price-label">{{ section.settings.price_label | default: '官方推荐价' }}</div>
-      <div class="taobao-price">
-        <span class="taobao-price__currency">{{ cart.currency.symbol }}</span>
-        <span class="taobao-price__amount">{{ current_variant.price | money_without_currency }}</span>
+    <div class="cat-toy-price-box">
+      <div class="cat-toy-price-label">{{ section.settings.price_label | default: '限时特惠价' }}</div>
+      <div class="cat-toy-price">
+        <span class="cat-toy-price__currency">{{ cart.currency.symbol }}</span>
+        <span class="cat-toy-price__amount">{{ current_variant.price | money_without_currency }}</span>
         {%- if current_variant.compare_at_price > current_variant.price -%}
-          <span class="taobao-price__original">{{ current_variant.compare_at_price | money }}</span>
-          <span class="taobao-price__discount">
+          <span class="cat-toy-price__original">{{ current_variant.compare_at_price | money }}</span>
+          <span class="cat-toy-price__discount">
             {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
             省{{ discount }}%
           </span>
@@ -96,74 +84,74 @@
 
     <!-- 促销信息 -->
     {%- if section.settings.promo_text != blank -%}
-      <div class="taobao-promo">
-        <span class="taobao-promo__tag">{{ section.settings.promo_tag | default: '限时优惠' }}</span>
-        <span class="taobao-promo__text">{{ section.settings.promo_text }}</span>
+      <div class="cat-toy-promo">
+        <span class="cat-toy-promo__tag">{{ section.settings.promo_tag | default: '限时特惠' }}</span>
+        <span class="cat-toy-promo__text">{{ section.settings.promo_text }}</span>
       </div>
     {%- endif -%}
 
     <!-- 商品标题 -->
-    <h1 class="taobao-title">
+    <h1 class="cat-toy-title">
       {%- if section.settings.title_prefix != blank -%}
-        <span class="taobao-title__tag">{{ section.settings.title_prefix }}</span>
+        <span class="cat-toy-title__tag">{{ section.settings.title_prefix }}</span>
       {%- endif -%}
-      {{ selected_product.title }}
+      {{ product.title }}
     </h1>
 
     <!-- 销量和评价 -->
-    <div class="taobao-stats">
-      <div class="taobao-stats__item">
-        <span class="taobao-stats__value">{{ total_sold }}</span>
-        <span class="taobao-stats__label">已售</span>
+    <div class="cat-toy-stats">
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ total_sold }}</span>
+        <span class="cat-toy-stats__label">已售</span>
       </div>
-      <div class="taobao-stats__divider"></div>
-      <div class="taobao-stats__item">
-        <span class="taobao-stats__value">{{ section.settings.review_count | default: '500+' }}</span>
-        <span class="taobao-stats__label">评价</span>
+      <div class="cat-toy-stats__divider"></div>
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ section.settings.review_count | default: '1000+' }}</span>
+        <span class="cat-toy-stats__label">评价</span>
       </div>
-      <div class="taobao-stats__divider"></div>
-      <div class="taobao-stats__item">
-        <span class="taobao-stats__value">{{ section.settings.rating | default: '4.9' }}</span>
-        <span class="taobao-stats__label">评分</span>
+      <div class="cat-toy-stats__divider"></div>
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ section.settings.rating | default: '4.9' }}</span>
+        <span class="cat-toy-stats__label">评分</span>
       </div>
     </div>
 
     <!-- 服务承诺 -->
-    <div class="taobao-services">
-      <div class="taobao-service">
+    <div class="cat-toy-services">
+      <div class="cat-toy-service">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22,4 12,14.01 9,11.01"/>
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22,4 12,14.01 9,11.01"></polyline>
         </svg>
         <span>正品保障</span>
       </div>
-      <div class="taobao-service">
+      <div class="cat-toy-service">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="1" y="3" width="15" height="13"/>
-          <polygon points="16,8 20,8 23,11 23,16 16,16"/>
-          <circle cx="5.5" cy="18.5" r="2.5"/>
-          <circle cx="18.5" cy="18.5" r="2.5"/>
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16,8 20,8 23,11 23,16 16,16"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
         </svg>
         <span>全球包邮</span>
       </div>
-      <div class="taobao-service">
+      <div class="cat-toy-service">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-          <circle cx="12" cy="10" r="3"/>
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
         </svg>
         <span>30天退换</span>
       </div>
     </div>
 
     <!-- 规格选择 -->
-    {%- if selected_product.has_only_default_variant == false -%}
-      <div class="taobao-variants">
-        {%- for option in selected_product.options_with_values -%}
-          <div class="taobao-option">
-            <div class="taobao-option__label">{{ option.name }}</div>
-            <div class="taobao-option__values">
+    {%- if product.has_only_default_variant == false -%}
+      <div class="cat-toy-variants">
+        {%- for option in product.options_with_values -%}
+          <div class="cat-toy-option">
+            <div class="cat-toy-option__label">{{ option.name }}</div>
+            <div class="cat-toy-option__values">
               {%- for value in option.values -%}
-                <label class="taobao-option__value {% if option.selected_value == value %}selected{% endif %}">
+                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}">
                   <input
                     type="radio"
                     name="{{ option.name }}"
@@ -180,86 +168,75 @@
     {%- endif -%}
 
     <!-- 数量选择 -->
-    <div class="taobao-quantity">
-      <div class="taobao-quantity__label">数量</div>
-      <div class="taobao-quantity__controls">
-        <button type="button" class="taobao-quantity__btn minus">-</button>
-        <input type="number" class="taobao-quantity__input" value="1" min="1" max="{{ current_variant.inventory_quantity | default: 999 }}">
-        <button type="button" class="taobao-quantity__btn plus">+</button>
+    <div class="cat-toy-quantity">
+      <div class="cat-toy-quantity__label">数量</div>
+      <div class="cat-toy-quantity__controls">
+        <button type="button" class="cat-toy-quantity__btn minus">-</button>
+        <input type="number" class="cat-toy-quantity__input" value="1" min="1" max="100">
+        <button type="button" class="cat-toy-quantity__btn plus">+</button>
       </div>
-      <span class="taobao-quantity__stock">库存充足</span>
+      <span class="cat-toy-quantity__stock">库存充足</span>
     </div>
 
   </div>
 
   <!-- 商品详情 -->
-  <div class="taobao-details">
-    <div class="taobao-details__header">
-      <div class="taobao-details__tab active">商品详情</div>
-      <div class="taobao-details__tab">规格参数</div>
-      <div class="taobao-details__tab">售后服务</div>
+  <div class="cat-toy-details">
+    <div class="cat-toy-details__header">
+      <div class="cat-toy-details__tab active">商品详情</div>
+      <div class="cat-toy-details__tab">规格参数</div>
+      <div class="cat-toy-details__tab">售后服务</div>
     </div>
 
-    <div class="taobao-details__content">
-      <div class="taobao-details__section">
-        {{ selected_product.description }}
+    <div class="cat-toy-details__content">
+      <div class="cat-toy-details__section">
+        {{ product.description }}
       </div>
 
       <!-- 商品图文详情 -->
-      <!-- Debug: blocks size = {{ section.blocks.size }} -->
-      {%- if section.blocks.size > 0 -%}
-        <div class="taobao-details__images">
-          {%- for block in section.blocks -%}
-            <!-- Debug: block type = {{ block.type }}, image = {{ block.settings.image }} -->
-            {%- if block.type == 'detail_image' -%}
-              {%- if block.settings.image != blank -%}
-                <img
-                  src="{{ block.settings.image | asset_url }}"
-                  alt="{{ block.settings.alt | default: 'Product detail' | escape }}"
-                  loading="lazy"
-                  class="taobao-details__image"
-                >
-              {%- else -%}
-                <!-- Debug: image is blank -->
-              {%- endif -%}
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      {%- else -%}
-        <!-- Debug: No blocks found -->
-      {%- endif -%}
+      <div class="cat-toy-details__images">
+        <img src="{{ 'detail_1.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_2.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_3.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_4.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_5.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_6.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_7.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_8.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+        <img src="{{ 'detail_9.jpg' | asset_url }}" alt="商品详情" class="cat-toy-details__image" loading="lazy">
+      </div>
     </div>
   </div>
 
   <!-- 固定底部购买栏 -->
-  <div class="taobao-bottom-bar">
-    <div class="taobao-bottom-bar__actions">
-      <button type="button" class="taobao-bottom-bar__icon">
+  <div class="cat-toy-bottom-bar">
+    <div class="cat-toy-bottom-bar__actions">
+      <button type="button" class="cat-toy-bottom-bar__icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9,22 9,12 15,12 15,22"/>
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9,22 9,12 15,12 15,22"></polyline>
         </svg>
         <span>首页</span>
       </button>
-      <button type="button" class="taobao-bottom-bar__icon">
+      <button type="button" class="cat-toy-bottom-bar__icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="9" cy="21" r="1"/>
-          <circle cx="20" cy="21" r="1"/>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
         <span>购物车</span>
       </button>
     </div>
 
-    <div class="taobao-bottom-bar__buttons">
-      <product-form class="taobao-product-form">
-        {%- form 'product', selected_product, id: 'taobao-product-form', novalidate: 'novalidate' -%}
+    <div class="cat-toy-bottom-bar__buttons">
+      <product-form class="cat-toy-product-form">
+        {%- form 'product', product, id: 'cat-toy-product-form', novalidate: 'novalidate' -%}
           <input type="hidden" name="id" value="{{ current_variant.id }}">
-          <input type="hidden" name="quantity" value="1" class="taobao-quantity-value">
+          <input type="hidden" name="quantity" value="1" class="cat-toy-quantity-value">
 
           <button
             type="button"
-            class="taobao-btn taobao-btn--cart"
+            class="cat-toy-btn cat-toy-btn--cart"
             {% unless current_variant.available %}disabled{% endunless %}
           >
             加入购物车
@@ -267,7 +244,7 @@
 
           <button
             type="submit"
-            class="taobao-btn taobao-btn--buy"
+            class="cat-toy-btn cat-toy-btn--buy"
             {% unless current_variant.available %}disabled{% endunless %}
           >
             {% if current_variant.available %}
@@ -283,47 +260,47 @@
 </div>
 
 <style>
-  .taobao-product-page {
-    --taobao-primary: #ff5000;
-    --taobao-secondary: #ff7d00;
-    --taobao-bg: #f5f5f5;
-    --taobao-card-bg: #ffffff;
-    --taobao-text: #333333;
-    --taobao-text-light: #666666;
-    --taobao-border: #e8e8e8;
+  .cat-toy-page {
+    --cat-toy-primary: #ff6b35;
+    --cat-toy-secondary: #ffa500;
+    --cat-toy-bg: #f5f5f5;
+    --cat-toy-card-bg: #ffffff;
+    --cat-toy-text: #333333;
+    --cat-toy-text-light: #666666;
+    --cat-toy-border: #e8e8e8;
 
-    background: var(--taobao-bg);
+    background: var(--cat-toy-bg);
     padding-bottom: 60px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   /* 图片区域 */
-  .taobao-gallery {
-    background: var(--taobao-card-bg);
+  .cat-toy-gallery {
+    background: var(--cat-toy-card-bg);
     margin-bottom: 10px;
   }
 
-  .taobao-gallery__main {
+  .cat-toy-gallery__main {
     position: relative;
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
   }
 
-  .taobao-gallery__image {
+  .cat-toy-gallery__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .taobao-gallery__thumbnails {
+  .cat-toy-gallery__thumbnails {
     display: flex;
     gap: 8px;
     padding: 12px;
     overflow-x: auto;
   }
 
-  .taobao-gallery__thumb {
+  .cat-toy-gallery__thumb {
     flex-shrink: 0;
     width: 60px;
     height: 60px;
@@ -333,63 +310,63 @@
     cursor: pointer;
   }
 
-  .taobao-gallery__thumb.active {
-    border-color: var(--taobao-primary);
+  .cat-toy-gallery__thumb.active {
+    border-color: var(--cat-toy-primary);
   }
 
-  .taobao-gallery__thumb img {
+  .cat-toy-gallery__thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
   /* 商品信息 */
-  .taobao-info {
-    background: var(--taobao-card-bg);
+  .cat-toy-info {
+    background: var(--cat-toy-card-bg);
     padding: 16px;
     margin-bottom: 10px;
   }
 
-  .taobao-price-box {
+  .cat-toy-price-box {
     background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%);
     padding: 16px;
     border-radius: 8px;
     margin-bottom: 12px;
   }
 
-  .taobao-price-label {
+  .cat-toy-price-label {
     font-size: 12px;
-    color: var(--taobao-primary);
+    color: var(--cat-toy-primary);
     margin-bottom: 4px;
   }
 
-  .taobao-price {
+  .cat-toy-price {
     display: flex;
     align-items: baseline;
     gap: 8px;
   }
 
-  .taobao-price__currency {
+  .cat-toy-price__currency {
     font-size: 18px;
-    color: var(--taobao-primary);
+    color: var(--cat-toy-primary);
     font-weight: 600;
   }
 
-  .taobao-price__amount {
+  .cat-toy-price__amount {
     font-size: 32px;
-    color: var(--taobao-primary);
+    color: var(--cat-toy-primary);
     font-weight: 700;
     line-height: 1;
   }
 
-  .taobao-price__original {
+  .cat-toy-price__original {
     font-size: 14px;
     color: #999;
     text-decoration: line-through;
   }
 
-  .taobao-price__discount {
-    background: var(--taobao-primary);
+  .cat-toy-price__discount {
+    background: var(--cat-toy-primary);
     color: white;
     padding: 2px 6px;
     border-radius: 4px;
@@ -398,7 +375,7 @@
   }
 
   /* 促销信息 */
-  .taobao-promo {
+  .cat-toy-promo {
     background: #fff8f0;
     border: 1px solid #ffd6b3;
     border-radius: 4px;
@@ -409,8 +386,8 @@
     gap: 8px;
   }
 
-  .taobao-promo__tag {
-    background: var(--taobao-primary);
+  .cat-toy-promo__tag {
+    background: var(--cat-toy-primary);
     color: white;
     padding: 2px 8px;
     border-radius: 2px;
@@ -418,23 +395,23 @@
     font-weight: 600;
   }
 
-  .taobao-promo__text {
+  .cat-toy-promo__text {
     font-size: 14px;
-    color: var(--taobao-primary);
+    color: var(--cat-toy-primary);
   }
 
   /* 标题 */
-  .taobao-title {
+  .cat-toy-title {
     font-size: 18px;
     font-weight: 600;
-    color: var(--taobao-text);
+    color: var(--cat-toy-text);
     line-height: 1.4;
     margin: 0 0 12px;
   }
 
-  .taobao-title__tag {
+  .cat-toy-title__tag {
     display: inline-block;
-    background: var(--taobao-primary);
+    background: var(--cat-toy-primary);
     color: white;
     padding: 2px 6px;
     border-radius: 2px;
@@ -444,129 +421,129 @@
   }
 
   /* 统计信息 */
-  .taobao-stats {
+  .cat-toy-stats {
     display: flex;
     align-items: center;
     padding: 12px 0;
-    border-top: 1px solid var(--taobao-border);
-    border-bottom: 1px solid var(--taobao-border);
+    border-top: 1px solid var(--cat-toy-border);
+    border-bottom: 1px solid var(--cat-toy-border);
     margin-bottom: 12px;
   }
 
-  .taobao-stats__item {
+  .cat-toy-stats__item {
     flex: 1;
     text-align: center;
   }
 
-  .taobao-stats__value {
+  .cat-toy-stats__value {
     display: block;
     font-size: 18px;
     font-weight: 600;
-    color: var(--taobao-text);
+    color: var(--cat-toy-text);
   }
 
-  .taobao-stats__label {
+  .cat-toy-stats__label {
     font-size: 12px;
-    color: var(--taobao-text-light);
+    color: var(--cat-toy-text-light);
   }
 
-  .taobao-stats__divider {
+  .cat-toy-stats__divider {
     width: 1px;
     height: 30px;
-    background: var(--taobao-border);
+    background: var(--cat-toy-border);
   }
 
   /* 服务承诺 */
-  .taobao-services {
+  .cat-toy-services {
     display: flex;
     gap: 16px;
     margin-bottom: 12px;
   }
 
-  .taobao-service {
+  .cat-toy-service {
     display: flex;
     align-items: center;
     gap: 4px;
     font-size: 12px;
-    color: var(--taobao-text-light);
+    color: var(--cat-toy-text-light);
   }
 
-  .taobao-service svg {
-    color: var(--taobao-primary);
+  .cat-toy-service svg {
+    color: var(--cat-toy-primary);
   }
 
   /* 规格选择 */
-  .taobao-variants {
+  .cat-toy-variants {
     margin-bottom: 12px;
   }
 
-  .taobao-option {
+  .cat-toy-option {
     margin-bottom: 12px;
   }
 
-  .taobao-option__label {
+  .cat-toy-option__label {
     font-size: 14px;
-    color: var(--taobao-text);
+    color: var(--cat-toy-text);
     margin-bottom: 8px;
     font-weight: 500;
   }
 
-  .taobao-option__values {
+  .cat-toy-option__values {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
 
-  .taobao-option__value {
+  .cat-toy-option__value {
     position: relative;
     cursor: pointer;
   }
 
-  .taobao-option__value input {
+  .cat-toy-option__value input {
     position: absolute;
     opacity: 0;
     pointer-events: none;
   }
 
-  .taobao-option__value span {
+  .cat-toy-option__value span {
     display: inline-block;
     padding: 8px 16px;
-    border: 1px solid var(--taobao-border);
+    border: 1px solid var(--cat-toy-border);
     border-radius: 4px;
     font-size: 14px;
     transition: all 0.2s;
   }
 
-  .taobao-option__value.selected span,
-  .taobao-option__value input:checked + span {
-    border-color: var(--taobao-primary);
-    color: var(--taobao-primary);
+  .cat-toy-option__value.selected span,
+  .cat-toy-option__value input:checked + span {
+    border-color: var(--cat-toy-primary);
+    color: var(--cat-toy-primary);
     background: #fff5f0;
   }
 
   /* 数量选择 */
-  .taobao-quantity {
+  .cat-toy-quantity {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 16px;
   }
 
-  .taobao-quantity__label {
+  .cat-toy-quantity__label {
     font-size: 14px;
-    color: var(--taobao-text);
+    color: var(--cat-toy-text);
     font-weight: 500;
   }
 
-  .taobao-quantity__controls {
+  .cat-toy-quantity__controls {
     display: flex;
     align-items: center;
-    border: 1px solid var(--taobao-border);
+    border: 1px solid var(--cat-toy-border);
     border-radius: 4px;
     overflow: hidden;
   }
 
-  .taobao-quantity__btn {
+  .cat-toy-quantity__btn {
     width: 32px;
     height: 32px;
     border: none;
@@ -576,11 +553,11 @@
     transition: background 0.2s;
   }
 
-  .taobao-quantity__btn:hover {
+  .cat-toy-quantity__btn:hover {
     background: #e8e8e8;
   }
 
-  .taobao-quantity__input {
+  .cat-toy-quantity__input {
     width: 50px;
     height: 32px;
     border: none;
@@ -589,45 +566,45 @@
     -moz-appearance: textfield;
   }
 
-  .taobao-quantity__input::-webkit-inner-spin-button,
-  .taobao-quantity__input::-webkit-outer-spin-button {
+  .cat-toy-quantity__input::-webkit-inner-spin-button,
+  .cat-toy-quantity__input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
 
-  .taobao-quantity__stock {
+  .cat-toy-quantity__stock {
     font-size: 12px;
     color: #52c41a;
   }
 
   /* 商品详情 */
-  .taobao-details {
-    background: var(--taobao-card-bg);
+  .cat-toy-details {
+    background: var(--cat-toy-card-bg);
     margin-bottom: 10px;
   }
 
-  .taobao-details__header {
+  .cat-toy-details__header {
     display: flex;
-    border-bottom: 1px solid var(--taobao-border);
+    border-bottom: 1px solid var(--cat-toy-border);
   }
 
-  .taobao-details__tab {
+  .cat-toy-details__tab {
     flex: 1;
     padding: 12px;
     text-align: center;
     font-size: 14px;
-    color: var(--taobao-text-light);
+    color: var(--cat-toy-text-light);
     cursor: pointer;
     position: relative;
     transition: color 0.2s;
   }
 
-  .taobao-details__tab.active {
-    color: var(--taobao-primary);
+  .cat-toy-details__tab.active {
+    color: var(--cat-toy-primary);
     font-weight: 600;
   }
 
-  .taobao-details__tab.active::after {
+  .cat-toy-details__tab.active::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -635,32 +612,38 @@
     transform: translateX(-50%);
     width: 40px;
     height: 2px;
-    background: var(--taobao-primary);
+    background: var(--cat-toy-primary);
   }
 
-  .taobao-details__content {
+  .cat-toy-details__content {
     padding: 16px;
   }
 
-  .taobao-details__section {
+  .cat-toy-details__section {
     font-size: 14px;
     line-height: 1.8;
-    color: var(--taobao-text);
+    color: var(--cat-toy-text);
+    margin-bottom: 20px;
   }
 
-  .taobao-details__image {
+  .cat-toy-details__images {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .cat-toy-details__image {
     width: 100%;
     display: block;
-    margin-bottom: 8px;
   }
 
   /* 固定底部栏 */
-  .taobao-bottom-bar {
+  .cat-toy-bottom-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--taobao-card-bg);
+    background: var(--cat-toy-card-bg);
     display: flex;
     align-items: center;
     padding: 8px 12px;
@@ -668,43 +651,43 @@
     z-index: 1000;
   }
 
-  .taobao-bottom-bar__actions {
+  .cat-toy-bottom-bar__actions {
     display: flex;
     gap: 16px;
     margin-right: 16px;
   }
 
-  .taobao-bottom-bar__icon {
+  .cat-toy-bottom-bar__icon {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
     background: none;
     border: none;
-    color: var(--taobao-text-light);
+    color: var(--cat-toy-text-light);
     font-size: 10px;
     cursor: pointer;
     padding: 4px;
   }
 
-  .taobao-bottom-bar__buttons {
+  .cat-toy-bottom-bar__buttons {
     flex: 1;
     display: flex;
     gap: 0;
   }
 
-  .taobao-product-form {
+  .cat-toy-product-form {
     display: flex;
     flex: 1;
   }
 
-  .taobao-product-form form {
+  .cat-toy-product-form form {
     display: flex;
     flex: 1;
     gap: 0;
   }
 
-  .taobao-btn {
+  .cat-toy-btn {
     flex: 1;
     padding: 12px 24px;
     border: none;
@@ -714,31 +697,31 @@
     transition: all 0.2s;
   }
 
-  .taobao-btn--cart {
-    background: var(--taobao-secondary);
+  .cat-toy-btn--cart {
+    background: var(--cat-toy-secondary);
     color: white;
     border-radius: 20px 0 0 20px;
   }
 
-  .taobao-btn--buy {
-    background: var(--taobao-primary);
+  .cat-toy-btn--buy {
+    background: var(--cat-toy-primary);
     color: white;
     border-radius: 0 20px 20px 0;
   }
 
-  .taobao-btn:disabled {
+  .cat-toy-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
   }
 
-  .taobao-btn:not(:disabled):hover {
+  .cat-toy-btn:not(:disabled):hover {
     opacity: 0.9;
     transform: translateY(-1px);
   }
 
   /* 响应式 */
   @media (min-width: 768px) {
-    .taobao-product-page {
+    .cat-toy-page {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
@@ -747,17 +730,17 @@
       padding: 20px;
     }
 
-    .taobao-gallery {
+    .cat-toy-gallery {
       position: sticky;
       top: 20px;
       height: fit-content;
     }
 
-    .taobao-details {
+    .cat-toy-details {
       grid-column: 1 / -1;
     }
 
-    .taobao-bottom-bar {
+    .cat-toy-bottom-bar {
       position: sticky;
       bottom: 20px;
       border-radius: 12px;
@@ -769,8 +752,8 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // 图片切换
-    const thumbnails = document.querySelectorAll('.taobao-gallery__thumb');
-    const mainImage = document.querySelector('.taobao-gallery__image');
+    const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
+    const mainImage = document.querySelector('.cat-toy-gallery__image');
 
     thumbnails.forEach(thumb => {
       thumb.addEventListener('click', function() {
@@ -782,10 +765,10 @@
     });
 
     // 数量控制
-    const minusBtn = document.querySelector('.taobao-quantity__btn.minus');
-    const plusBtn = document.querySelector('.taobao-quantity__btn.plus');
-    const quantityInput = document.querySelector('.taobao-quantity__input');
-    const hiddenQuantity = document.querySelector('.taobao-quantity-value');
+    const minusBtn = document.querySelector('.cat-toy-quantity__btn.minus');
+    const plusBtn = document.querySelector('.cat-toy-quantity__btn.plus');
+    const quantityInput = document.querySelector('.cat-toy-quantity__input');
+    const hiddenQuantity = document.querySelector('.cat-toy-quantity-value');
 
     minusBtn?.addEventListener('click', function() {
       const current = parseInt(quantityInput.value) || 1;
@@ -809,9 +792,9 @@
     });
 
     // 加入购物车
-    const cartBtn = document.querySelector('.taobao-btn--cart');
+    const cartBtn = document.querySelector('.cat-toy-btn--cart');
     cartBtn?.addEventListener('click', function() {
-      const form = document.getElementById('taobao-product-form');
+      const form = document.getElementById('cat-toy-product-form');
       const formData = new FormData(form);
 
       fetch('/cart/add.js', {
@@ -831,44 +814,39 @@
 
 {% schema %}
 {
-  "name": "淘宝风格产品页",
+  "name": "猫玩具产品页",
   "tag": "section",
-  "class": "taobao-product-section",
+  "class": "cat-toy-section",
   "settings": [
-    {
-      "type": "product",
-      "id": "product",
-      "label": "选择产品"
-    },
     {
       "type": "text",
       "id": "title_prefix",
       "label": "标题前缀标签",
-      "default": "官方推荐"
+      "default": "爆款热销"
     },
     {
       "type": "text",
       "id": "price_label",
       "label": "价格标签",
-      "default": "官方推荐价"
+      "default": "限时特惠价"
     },
     {
       "type": "text",
       "id": "promo_tag",
       "label": "促销标签",
-      "default": "限时优惠"
+      "default": "限时特惠"
     },
     {
       "type": "text",
       "id": "promo_text",
       "label": "促销文案",
-      "default": "新用户首单立减10%"
+      "default": "买2件立减5元，买3件立减10元"
     },
     {
       "type": "text",
       "id": "review_count",
       "label": "评价数量",
-      "default": "500+"
+      "default": "1000+"
     },
     {
       "type": "text",
@@ -883,27 +861,9 @@
       "default": "scheme-1"
     }
   ],
-  "blocks": [
-    {
-      "type": "detail_image",
-      "name": "详情图片",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "图片"
-        },
-        {
-          "type": "text",
-          "id": "alt",
-          "label": "图片描述"
-        }
-      ]
-    }
-  ],
   "presets": [
     {
-      "name": "淘宝风格产品页",
+      "name": "猫玩具产品页",
       "category": "产品"
     }
   ]
