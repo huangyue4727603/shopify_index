@@ -174,7 +174,21 @@
             <div class="cat-toy-option__label">{{ option.name }}</div>
             <div class="cat-toy-option__values">
               {%- for value in option.values -%}
-                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}">
+                {%- assign variant_for_value = null -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
+                    {%- assign variant_for_value = variant -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}"
+                  data-variant-id="{{ variant_for_value.id }}"
+                  {% if variant_for_value.featured_media %}
+                  data-variant-image="{{ variant_for_value.featured_media | image_url: width: 800 }}"
+                  data-variant-media-id="{{ variant_for_value.featured_media.id }}"
+                  {% endif %}
+                >
                   <input
                     type="radio"
                     name="{{ option.name }}"
@@ -829,19 +843,54 @@
       hiddenQuantity.value = this.value;
     });
 
-    // 规格选择变化时更新variant ID
-    const variantInputs = document.querySelectorAll('.cat-toy-option__value input');
+    // 规格选择变化时更新variant ID和图片
+    const variantLabels = document.querySelectorAll('.cat-toy-option__value');
     const variantIdInput = document.querySelector('.cat-toy-variant-id');
+    const mainImage = document.querySelector('.cat-toy-gallery__image');
 
-    variantInputs.forEach(input => {
-      input.addEventListener('change', function() {
-        // 获取所有选中的规格值
-        const selectedOptions = Array.from(document.querySelectorAll('.cat-toy-option__value input:checked'))
-          .map(input => input.value);
+    variantLabels.forEach(label => {
+      label.addEventListener('click', function() {
+        // 移除所有selected类
+        document.querySelectorAll('.cat-toy-option__value').forEach(l => {
+          l.classList.remove('selected');
+        });
 
-        // 在这里你需要找到对应的variant ID
-        // 暂时使用当前的variant ID
-        console.log('Selected options:', selectedOptions);
+        // 添加selected类到当前点击的label
+        this.classList.add('selected');
+
+        // 获取variant信息
+        const variantId = this.dataset.variantId;
+        const variantImage = this.dataset.variantImage;
+        const variantMediaId = this.dataset.variantMediaId;
+
+        // 更新隐藏的variant ID输入
+        if (variantId && variantIdInput) {
+          variantIdInput.value = variantId;
+        }
+
+        // 切换主图片
+        if (variantImage && mainImage) {
+          mainImage.src = variantImage;
+          mainImage.setAttribute('loading', 'eager');
+
+          // 同时更新缩略图的active状态
+          if (variantMediaId) {
+            const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
+            thumbnails.forEach(thumb => {
+              const mediaId = thumb.dataset.mediaId;
+              if (mediaId == variantMediaId) {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+              }
+            });
+          }
+        }
+
+        console.log('Variant changed:', {
+          id: variantId,
+          image: variantImage,
+          mediaId: variantMediaId
+        });
       });
     });
 
