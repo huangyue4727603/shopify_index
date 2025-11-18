@@ -3,7 +3,6 @@
     "main": {
       "type": "taobao-product",
       "settings": {
-        "product_id": "8094199906361",
         "title_prefix": "爆款热销",
         "price_label": "限时特惠价",
         "promo_tag": "限时特惠",
@@ -67,7 +66,18 @@
             "image": "detail_9.jpg"
           }
         }
-      }
+      },
+      "block_order": [
+        "detail_1",
+        "detail_2",
+        "detail_3",
+        "detail_4",
+        "detail_5",
+        "detail_6",
+        "detail_7",
+        "detail_8",
+        "detail_9"
+      ]
     }
   },
   "order": [
