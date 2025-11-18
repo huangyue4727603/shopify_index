@@ -206,19 +206,27 @@
       </div>
 
       <!-- 商品图文详情 -->
+      <!-- Debug: blocks size = {{ section.blocks.size }} -->
       {%- if section.blocks.size > 0 -%}
         <div class="taobao-details__images">
           {%- for block in section.blocks -%}
-            {%- if block.type == 'detail_image' and block.settings.image != blank -%}
-              <img
-                src="{{ block.settings.image | asset_url }}"
-                alt="{{ block.settings.alt | default: 'Product detail' | escape }}"
-                loading="lazy"
-                class="taobao-details__image"
-              >
+            <!-- Debug: block type = {{ block.type }}, image = {{ block.settings.image }} -->
+            {%- if block.type == 'detail_image' -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | asset_url }}"
+                  alt="{{ block.settings.alt | default: 'Product detail' | escape }}"
+                  loading="lazy"
+                  class="taobao-details__image"
+                >
+              {%- else -%}
+                <!-- Debug: image is blank -->
+              {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
         </div>
+      {%- else -%}
+        <!-- Debug: No blocks found -->
       {%- endif -%}
     </div>
   </div>
