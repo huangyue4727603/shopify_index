@@ -231,21 +231,23 @@
     <div class="cat-toy-bottom-bar__buttons">
       <product-form class="cat-toy-product-form">
         {%- form 'product', product, id: 'cat-toy-product-form', novalidate: 'novalidate' -%}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="id" value="{{ current_variant.id }}" class="cat-toy-variant-id">
           <input type="hidden" name="quantity" value="1" class="cat-toy-quantity-value">
 
           <button
             type="button"
             class="cat-toy-btn cat-toy-btn--cart"
             {% unless current_variant.available %}disabled{% endunless %}
+            data-action="add-to-cart"
           >
             加入购物车
           </button>
 
           <button
-            type="submit"
+            type="button"
             class="cat-toy-btn cat-toy-btn--buy"
             {% unless current_variant.available %}disabled{% endunless %}
+            data-action="buy-now"
           >
             {% if current_variant.available %}
               立即购买
@@ -785,9 +787,27 @@
       hiddenQuantity.value = this.value;
     });
 
+    // 规格选择变化时更新variant ID
+    const variantInputs = document.querySelectorAll('.cat-toy-option__value input');
+    const variantIdInput = document.querySelector('.cat-toy-variant-id');
+
+    variantInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        // 获取所有选中的规格值
+        const selectedOptions = Array.from(document.querySelectorAll('.cat-toy-option__value input:checked'))
+          .map(input => input.value);
+
+        // 在这里你需要找到对应的variant ID
+        // 暂时使用当前的variant ID
+        console.log('Selected options:', selectedOptions);
+      });
+    });
+
     // 加入购物车
-    const cartBtn = document.querySelector('.cat-toy-btn--cart');
+    const cartBtn = document.querySelector('[data-action="add-to-cart"]');
     cartBtn?.addEventListener('click', function() {
+      if (this.disabled) return;
+
       const form = document.getElementById('cat-toy-product-form');
       const formData = new FormData(form);
 
@@ -795,12 +815,48 @@
         method: 'POST',
         body: formData
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('添加失败');
+        }
+        return response.json();
+      })
       .then(data => {
         alert('已加入购物车！');
+        // 可选：刷新购物车数量
+        window.location.href = '/cart';
       })
       .catch(error => {
         console.error('Error:', error);
+        alert('加入购物车失败，请重试');
+      });
+    });
+
+    // 立即购买
+    const buyBtn = document.querySelector('[data-action="buy-now"]');
+    buyBtn?.addEventListener('click', function() {
+      if (this.disabled) return;
+
+      const form = document.getElementById('cat-toy-product-form');
+      const formData = new FormData(form);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('添加失败');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // 添加成功后直接跳转到结账页面
+        window.location.href = '/checkout';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('操作失败，请重试');
       });
     });
   });
