@@ -206,13 +206,13 @@
       </div>
 
       <!-- 商品图文详情 -->
-      {%- if section.settings.detail_images != blank -%}
+      {%- if section.blocks.size > 0 -%}
         <div class="taobao-details__images">
           {%- for block in section.blocks -%}
-            {%- if block.type == 'detail_image' -%}
+            {%- if block.type == 'detail_image' and block.settings.image != blank -%}
               <img
-                src="{{ block.settings.image | image_url: width: 800 }}"
-                alt="{{ block.settings.alt | escape }}"
+                src="{{ block.settings.image | asset_url }}"
+                alt="{{ block.settings.alt | default: 'Product detail' | escape }}"
                 loading="lazy"
                 class="taobao-details__image"
               >

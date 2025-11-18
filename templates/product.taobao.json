@@ -4,15 +4,70 @@
       "type": "taobao-product",
       "settings": {
         "product_id": "8094199906361",
-        "title_prefix": "官方推荐",
-        "price_label": "官方推荐价",
-        "promo_tag": "限时优惠",
-        "promo_text": "新用户首单立减10%",
-        "review_count": "500+",
+        "title_prefix": "爆款热销",
+        "price_label": "限时特惠价",
+        "promo_tag": "限时特惠",
+        "promo_text": "买2件立减5元，买3件立减10元",
+        "review_count": "1000+",
         "rating": "4.9",
         "color_scheme": "scheme-1"
       },
-      "blocks": {}
+      "blocks": {
+        "detail_1": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_1.jpg"
+          }
+        },
+        "detail_2": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_2.jpg"
+          }
+        },
+        "detail_3": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_3.jpg"
+          }
+        },
+        "detail_4": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_4.jpg"
+          }
+        },
+        "detail_5": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_5.jpg"
+          }
+        },
+        "detail_6": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_6.jpg"
+          }
+        },
+        "detail_7": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_7.jpg"
+          }
+        },
+        "detail_8": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_8.jpg"
+          }
+        },
+        "detail_9": {
+          "type": "detail_image",
+          "settings": {
+            "image": "detail_9.jpg"
+          }
+        }
+      }
     }
   },
   "order": [
