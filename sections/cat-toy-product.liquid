@@ -32,6 +32,30 @@
 -%}
 
 <div class="cat-toy-page color-{{ section.settings.color_scheme }}">
+
+  <!-- Debug Info -->
+  <div style="display:none;" id="product-debug-info">
+    <h3>Product Debug Information</h3>
+    <p>Product ID: {{ product.id }}</p>
+    <p>Variants Count: {{ product.variants.size }}</p>
+    <hr>
+    {% for variant in product.variants %}
+      <div style="margin-bottom: 10px;">
+        <strong>Variant {{ forloop.index }}:</strong><br>
+        - ID: {{ variant.id }}<br>
+        - Title: {{ variant.title }}<br>
+        - Option1: {{ variant.option1 }}<br>
+        - Price: {{ variant.price | money }}<br>
+        {% if variant.featured_media %}
+        - Featured Media ID: {{ variant.featured_media.id }}<br>
+        - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}<br>
+        {% else %}
+        - No Featured Media<br>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
   <!-- 商品图片区域 -->
   <div class="cat-toy-gallery">
     <div class="cat-toy-gallery__main">
@@ -734,6 +758,13 @@
     console.log('%c Last Updated: 2025-11-19 00:15 ', 'background: #666; color: white; padding: 2px 6px; border-radius: 2px;');
     console.log('%c Branch: 1114 | SKU Image Linking Ready ', 'background: #52c41a; color: white; padding: 2px 6px; border-radius: 2px;');
     console.log('---');
+
+    // 输出产品Variants调试信息
+    const debugInfo = document.getElementById('product-debug-info');
+    if (debugInfo) {
+      console.log('%c Product Debug Info ', 'background: #1890ff; color: white; font-weight: bold; padding: 2px 6px;');
+      console.log(debugInfo.innerHTML);
+    }
 
     // 图片切换
     const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
