@@ -3,6 +3,7 @@
     "main": {
       "type": "taobao-product",
       "settings": {
+        "product_id": "8094199906361",
         "title_prefix": "官方推荐",
         "price_label": "官方推荐价",
         "promo_tag": "限时优惠",

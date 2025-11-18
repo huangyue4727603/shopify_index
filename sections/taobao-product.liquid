@@ -4,7 +4,15 @@
 {% endcomment %}
 
 {%- liquid
-  assign product = product | default: section.settings.product
+  # 优先使用section设置中选择的产品
+  assign product = section.settings.product
+
+  # 如果没有设置产品，则使用当前页面的产品
+  if product == blank
+    assign product = product
+  endif
+
+  # 如果仍然为空，使用collection中的第一个产品
   if product == blank
     assign product = collection.products.first
   endif
