@@ -3,13 +3,14 @@
   淘宝风格产品详情页 - 通用版
   Taobao Style Product Page - Generic
   ============================================
-  Version: 1.0.0-1114
-  Last Updated: 2025-11-19 01:00
+  Version: 1.1.0-1114
+  Last Updated: 2025-11-19 01:10
   Branch: 1114
   ============================================
   Features:
   - 使用Shopify产品图片(自动读取)
-  - SKU点击切换图片联动
+  - 支持图片、视频、3D模型展示
+  - SKU点击切换媒体联动
   - 价格自动更新
   - 商品描述HTML展示
   - 购物车功能
@@ -69,18 +70,32 @@
     {% endfor %}
   </div>
 
-  <!-- 商品图片区域 -->
+  <!-- 商品图片/视频区域 -->
   <div class="cat-toy-gallery">
     <div class="cat-toy-gallery__main">
       {%- if featured_media -%}
-        <img
-          src="{{ featured_media | image_url: width: 800 }}"
-          alt="{{ featured_media.alt | escape }}"
-          loading="eager"
-          width="{{ featured_media.width }}"
-          height="{{ featured_media.height }}"
-          class="cat-toy-gallery__image"
-        >
+        {%- case featured_media.media_type -%}
+          {%- when 'video' or 'external_video' -%}
+            {{ featured_media | video_tag:
+              image_size: '800x',
+              autoplay: false,
+              loop: false,
+              controls: true,
+              muted: false,
+              class: 'cat-toy-gallery__video'
+            }}
+          {%- when 'model' -%}
+            {{ featured_media | model_viewer_tag }}
+          {%- else -%}
+            <img
+              src="{{ featured_media | image_url: width: 800 }}"
+              alt="{{ featured_media.alt | escape }}"
+              loading="eager"
+              width="{{ featured_media.width }}"
+              height="{{ featured_media.height }}"
+              class="cat-toy-gallery__image"
+            >
+        {%- endcase -%}
       {%- else -%}
         {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {%- endif -%}
@@ -89,12 +104,25 @@
     {%- if product.media.size > 1 -%}
       <div class="cat-toy-gallery__thumbnails">
         {%- for media in product.media limit: 5 -%}
-          <div class="cat-toy-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
-            <img
-              src="{{ media | image_url: width: 100 }}"
-              alt="{{ media.alt | escape }}"
-              loading="lazy"
-            >
+          <div class="cat-toy-gallery__thumb {% if forloop.first %}active{% endif %}"
+               data-media-id="{{ media.id }}"
+               data-media-type="{{ media.media_type }}">
+            {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              <img
+                src="{{ media.preview_image | image_url: width: 100 }}"
+                alt="{{ media.alt | escape }}"
+                loading="lazy"
+              >
+              <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            {%- else -%}
+              <img
+                src="{{ media | image_url: width: 100 }}"
+                alt="{{ media.alt | escape }}"
+                loading="lazy"
+              >
+            {%- endif -%}
           </div>
         {%- endfor -%}
       </div>
@@ -312,10 +340,15 @@
     overflow: hidden;
   }
 
-  .cat-toy-gallery__image {
+  .cat-toy-gallery__image,
+  .cat-toy-gallery__video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .cat-toy-gallery__video {
+    background: #000;
   }
 
   .cat-toy-gallery__thumbnails {
@@ -326,6 +359,7 @@
   }
 
   .cat-toy-gallery__thumb {
+    position: relative;
     flex-shrink: 0;
     width: 60px;
     height: 60px;
@@ -343,6 +377,15 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .cat-toy-gallery__thumb .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.9;
+    pointer-events: none;
   }
 
   /* 商品信息 */
@@ -795,16 +838,42 @@
     });
     if (DEBUG) console.log('Preloaded images:', variantImages.length);
 
-    // 图片切换
+    // 图片/视频切换
     const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
-    const mainImage = document.querySelector('.cat-toy-gallery__image');
+    const galleryMain = document.querySelector('.cat-toy-gallery__main');
+
+    // 保存所有media数据
+    const mediaData = [];
+    {% for media in product.media limit: 5 %}
+      mediaData.push({
+        id: '{{ media.id }}',
+        type: '{{ media.media_type }}',
+        {% if media.media_type == 'video' or media.media_type == 'external_video' %}
+        html: `{{ media | video_tag: image_size: '800x', autoplay: false, loop: false, controls: true, muted: false, class: 'cat-toy-gallery__video' }}`
+        {% else %}
+        url: '{{ media | image_url: width: 800 }}',
+        alt: '{{ media.alt | escape }}'
+        {% endif %}
+      });
+    {% endfor %}
 
     thumbnails.forEach(thumb => {
       thumb.addEventListener('click', function() {
         thumbnails.forEach(t => t.classList.remove('active'));
         this.classList.add('active');
-        const newSrc = this.querySelector('img').src.replace('width=100', 'width=800');
-        mainImage.src = newSrc;
+
+        const mediaId = this.dataset.mediaId;
+        const media = mediaData.find(m => m.id === mediaId);
+
+        if (media) {
+          if (media.type === 'video' || media.type === 'external_video') {
+            // 显示视频
+            galleryMain.innerHTML = media.html;
+          } else {
+            // 显示图片
+            galleryMain.innerHTML = `<img src="${media.url}" alt="${media.alt}" class="cat-toy-gallery__image" loading="eager">`;
+          }
+        }
       });
     });
 
