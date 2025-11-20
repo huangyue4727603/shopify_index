@@ -1,0 +1,1005 @@
+{% comment %}
+  ============================================
+  淘宝风格产品详情页 - 通用版
+  Taobao Style Product Page - Generic
+  ============================================
+  Version: 1.0.0-1114
+  Last Updated: 2025-11-19 01:00
+  Branch: 1114
+  ============================================
+  Features:
+  - 使用Shopify产品图片(自动读取)
+  - SKU点击切换图片联动
+  - 价格自动更新
+  - 商品描述HTML展示
+  - 购物车功能
+  ============================================
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+
+  # 计算已售数量
+  assign product_id_str = product.id | append: ''
+  assign last_digit = product_id_str | slice: -1, 1 | plus: 0
+  assign second_last = product_id_str | slice: -2, 1 | plus: 0
+  assign third_last = product_id_str | slice: -3, 1 | plus: 0
+  assign fourth_last = product_id_str | slice: -4, 1 | plus: 0
+  assign today_day_of_year = 'now' | date: '%j' | plus: 0
+
+  assign part1 = last_digit | times: 80
+  assign part2 = second_last | times: 60
+  assign part3 = third_last | times: 40
+  assign part4 = fourth_last | times: 20
+  assign base_sold = part1 | plus: part2 | plus: part3 | plus: part4 | plus: 100
+
+  assign daily_base = last_digit | plus: 1
+  assign daily_increment = daily_base | modulo: 10 | plus: 1
+  assign yearly_increment = today_day_of_year | times: daily_increment
+  assign total_sold = base_sold | plus: yearly_increment
+
+  if total_sold > 9999
+    assign total_sold = 9999
+  endif
+-%}
+
+<div class="cat-toy-page color-{{ section.settings.color_scheme }}">
+
+  <!-- Debug Info -->
+  <div style="display:none;" id="product-debug-info">
+    <h3>Product Debug Information</h3>
+    <p>Product ID: {{ product.id }}</p>
+    <p>Variants Count: {{ product.variants.size }}</p>
+    <hr>
+    {% for variant in product.variants %}
+      <div style="margin-bottom: 10px;">
+        <strong>Variant {{ forloop.index }}:</strong><br>
+        - ID: {{ variant.id }}<br>
+        - Title: {{ variant.title }}<br>
+        - Option1: {{ variant.option1 }}<br>
+        - Price: {{ variant.price | money }}<br>
+        {% if variant.featured_media %}
+        - Featured Media ID: {{ variant.featured_media.id }}<br>
+        - Featured Media URL: {{ variant.featured_media | image_url: width: 100 }}<br>
+        {% else %}
+        - No Featured Media<br>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- 商品图片区域 -->
+  <div class="cat-toy-gallery">
+    <div class="cat-toy-gallery__main">
+      {%- if featured_media -%}
+        <img
+          src="{{ featured_media | image_url: width: 800 }}"
+          alt="{{ featured_media.alt | escape }}"
+          loading="eager"
+          width="{{ featured_media.width }}"
+          height="{{ featured_media.height }}"
+          class="cat-toy-gallery__image"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    {%- if product.media.size > 1 -%}
+      <div class="cat-toy-gallery__thumbnails">
+        {%- for media in product.media limit: 5 -%}
+          <div class="cat-toy-gallery__thumb {% if forloop.first %}active{% endif %}" data-media-id="{{ media.id }}">
+            <img
+              src="{{ media | image_url: width: 100 }}"
+              alt="{{ media.alt | escape }}"
+              loading="lazy"
+            >
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- 商品信息区域 -->
+  <div class="cat-toy-info">
+    <!-- 价格区域 -->
+    <div class="cat-toy-price-box">
+      <div class="cat-toy-price-label">{{ section.settings.price_label | default: '限时特惠价' }}</div>
+      <div class="cat-toy-price">
+        <span class="cat-toy-price__currency">{{ cart.currency.symbol }}</span>
+        <span class="cat-toy-price__amount">{{ current_variant.price | money_without_currency }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="cat-toy-price__original">{{ current_variant.compare_at_price | money }}</span>
+          <span class="cat-toy-price__discount">
+            {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+            省{{ discount }}%
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- 商品标题 -->
+    <h1 class="cat-toy-title">
+      {%- if section.settings.title_prefix != blank -%}
+        <span class="cat-toy-title__tag">{{ section.settings.title_prefix }}</span>
+      {%- endif -%}
+      {{ product.title }}
+    </h1>
+
+    <!-- 销量和评价 -->
+    <div class="cat-toy-stats">
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ total_sold }}</span>
+        <span class="cat-toy-stats__label">已售</span>
+      </div>
+      <div class="cat-toy-stats__divider"></div>
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ section.settings.review_count | default: '1000+' }}</span>
+        <span class="cat-toy-stats__label">评价</span>
+      </div>
+      <div class="cat-toy-stats__divider"></div>
+      <div class="cat-toy-stats__item">
+        <span class="cat-toy-stats__value">{{ section.settings.rating | default: '4.9' }}</span>
+        <span class="cat-toy-stats__label">评分</span>
+      </div>
+    </div>
+
+    <!-- 服务承诺 -->
+    <div class="cat-toy-services">
+      <div class="cat-toy-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22,4 12,14.01 9,11.01"></polyline>
+        </svg>
+        <span>正品保障</span>
+      </div>
+      <div class="cat-toy-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16,8 20,8 23,11 23,16 16,16"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+        <span>全球包邮</span>
+      </div>
+      <div class="cat-toy-service">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <span>30天退换</span>
+      </div>
+    </div>
+
+    <!-- 规格选择 -->
+    {%- if product.has_only_default_variant == false -%}
+      <div class="cat-toy-variants">
+        {%- for option in product.options_with_values -%}
+          <div class="cat-toy-option">
+            <div class="cat-toy-option__label">{{ option.name }}</div>
+            <div class="cat-toy-option__values">
+              {%- for value in option.values -%}
+                {%- assign variant_for_value = null -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
+                    {%- assign variant_for_value = variant -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                <label class="cat-toy-option__value {% if option.selected_value == value %}selected{% endif %}"
+                  data-variant-id="{{ variant_for_value.id }}"
+                  data-variant-price="{{ variant_for_value.price | money_without_currency }}"
+                  {% if variant_for_value.featured_media %}
+                  data-variant-image="{{ variant_for_value.featured_media | image_url: width: 800 }}"
+                  data-variant-media-id="{{ variant_for_value.featured_media.id }}"
+                  {% endif %}
+                >
+                  <input
+                    type="radio"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <span>{{ value }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <!-- 数量选择 -->
+    <div class="cat-toy-quantity">
+      <div class="cat-toy-quantity__label">数量</div>
+      <div class="cat-toy-quantity__controls">
+        <button type="button" class="cat-toy-quantity__btn minus">-</button>
+        <input type="number" class="cat-toy-quantity__input" value="1" min="1" max="100">
+        <button type="button" class="cat-toy-quantity__btn plus">+</button>
+      </div>
+      <span class="cat-toy-quantity__stock">库存充足</span>
+    </div>
+
+  </div>
+
+  <!-- 商品详情 -->
+  <div class="cat-toy-details">
+    <div class="cat-toy-details__content">
+      <!-- 商品描述HTML -->
+      {%- if product.description != blank -%}
+        <div class="cat-toy-details__description">
+          {{ product.description }}
+        </div>
+      {%- else -%}
+        <div class="cat-toy-details__placeholder">
+          <p>暂无商品详情</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- 固定底部购买栏 -->
+  <div class="cat-toy-bottom-bar">
+    <div class="cat-toy-bottom-bar__actions">
+      <button type="button" class="cat-toy-bottom-bar__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9,22 9,12 15,12 15,22"></polyline>
+        </svg>
+        <span>首页</span>
+      </button>
+      <button type="button" class="cat-toy-bottom-bar__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span>购物车</span>
+      </button>
+    </div>
+
+    <div class="cat-toy-bottom-bar__buttons">
+      <product-form class="cat-toy-product-form">
+        {%- form 'product', product, id: 'cat-toy-product-form', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" class="cat-toy-variant-id">
+          <input type="hidden" name="quantity" value="1" class="cat-toy-quantity-value">
+
+          <button
+            type="button"
+            class="cat-toy-btn cat-toy-btn--cart cat-toy-btn--full"
+            {% unless current_variant.available %}disabled{% endunless %}
+            data-action="add-to-cart"
+          >
+            {% if current_variant.available %}
+              加入购物车
+            {% else %}
+              已售罄
+            {% endif %}
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cat-toy-page {
+    --cat-toy-primary: #ff6b35;
+    --cat-toy-secondary: #ffa500;
+    --cat-toy-bg: #f5f5f5;
+    --cat-toy-card-bg: #ffffff;
+    --cat-toy-text: #333333;
+    --cat-toy-text-light: #666666;
+    --cat-toy-border: #e8e8e8;
+
+    background: var(--cat-toy-bg);
+    padding-bottom: 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* 图片区域 */
+  .cat-toy-gallery {
+    background: var(--cat-toy-card-bg);
+    margin-bottom: 10px;
+  }
+
+  .cat-toy-gallery__main {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .cat-toy-gallery__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cat-toy-gallery__thumbnails {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    overflow-x: auto;
+  }
+
+  .cat-toy-gallery__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .cat-toy-gallery__thumb.active {
+    border-color: var(--cat-toy-primary);
+  }
+
+  .cat-toy-gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 商品信息 */
+  .cat-toy-info {
+    background: var(--cat-toy-card-bg);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+
+  .cat-toy-price-box {
+    background: linear-gradient(135deg, #fff5f0 0%, #ffe8d9 100%);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .cat-toy-price-label {
+    font-size: 12px;
+    color: var(--cat-toy-primary);
+    margin-bottom: 4px;
+  }
+
+  .cat-toy-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .cat-toy-price__currency {
+    font-size: 18px;
+    color: var(--cat-toy-primary);
+    font-weight: 600;
+  }
+
+  .cat-toy-price__amount {
+    font-size: 32px;
+    color: var(--cat-toy-primary);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .cat-toy-price__original {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .cat-toy-price__discount {
+    background: var(--cat-toy-primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* 促销信息 */
+  .cat-toy-promo {
+    background: #fff8f0;
+    border: 1px solid #ffd6b3;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cat-toy-promo__tag {
+    background: var(--cat-toy-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .cat-toy-promo__text {
+    font-size: 14px;
+    color: var(--cat-toy-primary);
+  }
+
+  /* 标题 */
+  .cat-toy-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cat-toy-text);
+    line-height: 1.4;
+    margin: 0 0 12px;
+  }
+
+  .cat-toy-title__tag {
+    display: inline-block;
+    background: var(--cat-toy-primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* 统计信息 */
+  .cat-toy-stats {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--cat-toy-border);
+    border-bottom: 1px solid var(--cat-toy-border);
+    margin-bottom: 12px;
+  }
+
+  .cat-toy-stats__item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .cat-toy-stats__value {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cat-toy-text);
+  }
+
+  .cat-toy-stats__label {
+    font-size: 12px;
+    color: var(--cat-toy-text-light);
+  }
+
+  .cat-toy-stats__divider {
+    width: 1px;
+    height: 30px;
+    background: var(--cat-toy-border);
+  }
+
+  /* 服务承诺 */
+  .cat-toy-services {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .cat-toy-service {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--cat-toy-text-light);
+  }
+
+  .cat-toy-service svg {
+    color: var(--cat-toy-primary);
+  }
+
+  /* 规格选择 */
+  .cat-toy-variants {
+    margin-bottom: 12px;
+  }
+
+  .cat-toy-option {
+    margin-bottom: 12px;
+  }
+
+  .cat-toy-option__label {
+    font-size: 14px;
+    color: var(--cat-toy-text);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .cat-toy-option__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cat-toy-option__value {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .cat-toy-option__value input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cat-toy-option__value span {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--cat-toy-border);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .cat-toy-option__value.selected span,
+  .cat-toy-option__value input:checked + span {
+    border-color: var(--cat-toy-primary);
+    color: var(--cat-toy-primary);
+    background: #fff5f0;
+  }
+
+  /* 数量选择 */
+  .cat-toy-quantity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .cat-toy-quantity__label {
+    font-size: 14px;
+    color: var(--cat-toy-text);
+    font-weight: 500;
+  }
+
+  .cat-toy-quantity__controls {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cat-toy-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .cat-toy-quantity__btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f5f5f5;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .cat-toy-quantity__btn:hover {
+    background: #e8e8e8;
+  }
+
+  .cat-toy-quantity__input {
+    width: 50px;
+    height: 32px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    -moz-appearance: textfield;
+  }
+
+  .cat-toy-quantity__input::-webkit-inner-spin-button,
+  .cat-toy-quantity__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .cat-toy-quantity__stock {
+    font-size: 12px;
+    color: #52c41a;
+  }
+
+  /* 商品详情 */
+  .cat-toy-details {
+    background: var(--cat-toy-card-bg);
+    margin-bottom: 10px;
+  }
+
+  .cat-toy-details__header {
+    display: flex;
+    border-bottom: 1px solid var(--cat-toy-border);
+  }
+
+  .cat-toy-details__tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--cat-toy-text-light);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .cat-toy-details__tab.active {
+    color: var(--cat-toy-primary);
+    font-weight: 600;
+  }
+
+  .cat-toy-details__tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--cat-toy-primary);
+  }
+
+  .cat-toy-details__content {
+    padding: 16px;
+  }
+
+  .cat-toy-details__section {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--cat-toy-text);
+    margin-bottom: 20px;
+  }
+
+  .cat-toy-details__description {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--cat-toy-text);
+  }
+
+  .cat-toy-details__description img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .cat-toy-details__description p {
+    margin: 10px 0;
+  }
+
+  .cat-toy-details__placeholder {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+  }
+
+  /* 固定底部栏 */
+  .cat-toy-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--cat-toy-card-bg);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .cat-toy-bottom-bar__actions {
+    display: flex;
+    gap: 16px;
+    margin-right: 16px;
+  }
+
+  .cat-toy-bottom-bar__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: var(--cat-toy-text-light);
+    font-size: 10px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .cat-toy-bottom-bar__buttons {
+    flex: 1;
+    display: flex;
+    gap: 0;
+  }
+
+  .cat-toy-product-form {
+    display: flex;
+    flex: 1;
+  }
+
+  .cat-toy-product-form form {
+    display: flex;
+    flex: 1;
+    gap: 0;
+  }
+
+  .cat-toy-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cat-toy-btn--cart {
+    background: var(--cat-toy-primary);
+    color: white;
+  }
+
+  .cat-toy-btn--full {
+    border-radius: 20px;
+  }
+
+  .cat-toy-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .cat-toy-btn:not(:disabled):hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* 响应式 */
+  @media (min-width: 768px) {
+    .cat-toy-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .cat-toy-details {
+      grid-column: 1 / -1;
+    }
+
+    .cat-toy-bottom-bar {
+      position: sticky;
+      bottom: 20px;
+      border-radius: 12px;
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 版本信息 (按F12查看完整日志)
+    const DEBUG = false; // 设置为true显示详细日志
+
+    console.log('%c TB Product v1.0.0-1114 ', 'background: #ff6b35; color: white; font-weight: bold; padding: 2px 6px;');
+
+    // 预加载所有variant图片
+    const variantImages = [];
+    document.querySelectorAll('.cat-toy-option__value[data-variant-image]').forEach(label => {
+      const imgUrl = label.dataset.variantImage;
+      if (imgUrl && !variantImages.includes(imgUrl)) {
+        const img = new Image();
+        img.src = imgUrl;
+        variantImages.push(imgUrl);
+      }
+    });
+    if (DEBUG) console.log('Preloaded images:', variantImages.length);
+
+    // 图片切换
+    const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
+    const mainImage = document.querySelector('.cat-toy-gallery__image');
+
+    thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        thumbnails.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const newSrc = this.querySelector('img').src.replace('width=100', 'width=800');
+        mainImage.src = newSrc;
+      });
+    });
+
+    // 数量控制
+    const minusBtn = document.querySelector('.cat-toy-quantity__btn.minus');
+    const plusBtn = document.querySelector('.cat-toy-quantity__btn.plus');
+    const quantityInput = document.querySelector('.cat-toy-quantity__input');
+    const hiddenQuantity = document.querySelector('.cat-toy-quantity-value');
+
+    minusBtn?.addEventListener('click', function() {
+      const current = parseInt(quantityInput.value) || 1;
+      if (current > 1) {
+        quantityInput.value = current - 1;
+        hiddenQuantity.value = current - 1;
+      }
+    });
+
+    plusBtn?.addEventListener('click', function() {
+      const current = parseInt(quantityInput.value) || 1;
+      const max = parseInt(quantityInput.max) || 999;
+      if (current < max) {
+        quantityInput.value = current + 1;
+        hiddenQuantity.value = current + 1;
+      }
+    });
+
+    quantityInput?.addEventListener('change', function() {
+      hiddenQuantity.value = this.value;
+    });
+
+    // 规格选择变化时更新variant ID和图片
+    const variantLabels = document.querySelectorAll('.cat-toy-option__value');
+    const variantIdInput = document.querySelector('.cat-toy-variant-id');
+
+    if (DEBUG) {
+      console.log('=== SKU Setup ===');
+      console.log('Found variant labels:', variantLabels.length);
+    }
+
+    variantLabels.forEach((label, index) => {
+      if (DEBUG) {
+        console.log(`Label ${index}:`, {
+          variantId: label.dataset.variantId,
+          text: label.textContent.trim()
+        });
+      }
+
+      label.addEventListener('click', function(e) {
+        // 移除所有selected类
+        document.querySelectorAll('.cat-toy-option__value').forEach(l => {
+          l.classList.remove('selected');
+        });
+
+        // 添加selected类到当前点击的label
+        this.classList.add('selected');
+
+        // 获取variant信息
+        const variantId = this.dataset.variantId;
+        const variantImage = this.dataset.variantImage;
+        const variantMediaId = this.dataset.variantMediaId;
+        const variantPrice = this.dataset.variantPrice;
+
+        // 更新隐藏的variant ID输入 (购物车会使用这个ID)
+        if (variantId && variantIdInput) {
+          variantIdInput.value = variantId;
+        }
+
+        // 更新显示的价格
+        if (variantPrice) {
+          const priceElement = document.querySelector('.cat-toy-price__amount');
+          if (priceElement) {
+            priceElement.textContent = variantPrice;
+          }
+        }
+
+        // 快速切换主图片
+        const mainImageNow = document.querySelector('.cat-toy-gallery__image');
+        if (variantImage && mainImageNow) {
+          // 直接设置src,图片已预加载
+          mainImageNow.src = variantImage;
+
+          // 同时更新缩略图的active状态
+          if (variantMediaId) {
+            const thumbnails = document.querySelectorAll('.cat-toy-gallery__thumb');
+            thumbnails.forEach(thumb => {
+              const mediaId = thumb.dataset.mediaId;
+              if (mediaId == variantMediaId) {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+              }
+            });
+          }
+        } else if (DEBUG) {
+          console.error('Cannot change image:', {
+            hasImage: !!variantImage,
+            hasMainImage: !!mainImageNow
+          });
+        }
+      });
+    });
+
+    // 加入购物车
+    const cartBtn = document.querySelector('[data-action="add-to-cart"]');
+    cartBtn?.addEventListener('click', function() {
+      if (this.disabled) return;
+
+      const form = document.getElementById('cat-toy-product-form');
+      const formData = new FormData(form);
+
+      // 转换为application/x-www-form-urlencoded格式
+      const params = new URLSearchParams(formData);
+
+      if (DEBUG) console.log('Adding to cart:', params.toString());
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(err.description || '添加失败');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert('已加入购物车！');
+        window.location.href = '/cart';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('加入购物车失败: ' + error.message);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "淘宝风格产品页",
+  "tag": "section",
+  "class": "tb-product-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_prefix",
+      "label": "标题前缀标签",
+      "default": "爆款热销"
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "价格标签",
+      "default": "限时特惠价"
+    },
+    {
+      "type": "text",
+      "id": "promo_tag",
+      "label": "促销标签",
+      "default": "限时特惠"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "促销文案",
+      "default": "买2件立减5元，买3件立减10元"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "评价数量",
+      "default": "1000+"
+    },
+    {
+      "type": "text",
+      "id": "rating",
+      "label": "评分",
+      "default": "4.9"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "淘宝风格产品页",
+      "category": "产品"
+    }
+  ]
+}
+{% endschema %}

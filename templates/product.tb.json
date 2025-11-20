@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "tb-product",
+      "settings": {
+        "title_prefix": "爆款热销",
+        "price_label": "限时优惠",
+        "promo_tag": "限时特惠",
+        "promo_text": "买2件立减5元，买3件立减10元",
+        "review_count": "1000+",
+        "rating": "4.9",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
