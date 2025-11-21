@@ -347,7 +347,12 @@
       "add_to_cart": "Add to Cart",
       "sold_out": "Sold Out",
       "added_to_cart": "Added to cart!",
-      "add_to_cart_error": "Failed to add to cart"
+      "add_to_cart_error": "Failed to add to cart",
+      "quantity": "Quantity",
+      "in_stock": "In Stock",
+      "limited_offer_price": "Limited Offer",
+      "home": "Home",
+      "cart": "Cart"
     }
   }
 }
