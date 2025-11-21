@@ -1090,6 +1090,30 @@
           "label": "Show product recommendations"
         }
       }
+    },
+    "tb_product": {
+      "name": "TB Product Page",
+      "category": "Product",
+      "settings": {
+        "title_prefix": {
+          "label": "Title prefix tag"
+        },
+        "price_label": {
+          "label": "Price label"
+        },
+        "promo_tag": {
+          "label": "Promotion tag"
+        },
+        "promo_text": {
+          "label": "Promotion text"
+        },
+        "review_count": {
+          "label": "Review count"
+        },
+        "rating": {
+          "label": "Rating"
+        }
+      }
     }
   }
 }

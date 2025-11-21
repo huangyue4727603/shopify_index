@@ -159,17 +159,17 @@
     <div class="cat-toy-stats">
       <div class="cat-toy-stats__item">
         <span class="cat-toy-stats__value">{{ total_sold }}</span>
-        <span class="cat-toy-stats__label">已售</span>
+        <span class="cat-toy-stats__label">{{ 'sections.tb_product.sold' | t }}</span>
       </div>
       <div class="cat-toy-stats__divider"></div>
       <div class="cat-toy-stats__item">
         <span class="cat-toy-stats__value">{{ section.settings.review_count | default: '1000+' }}</span>
-        <span class="cat-toy-stats__label">评价</span>
+        <span class="cat-toy-stats__label">{{ 'sections.tb_product.reviews' | t }}</span>
       </div>
       <div class="cat-toy-stats__divider"></div>
       <div class="cat-toy-stats__item">
         <span class="cat-toy-stats__value">{{ section.settings.rating | default: '4.9' }}</span>
-        <span class="cat-toy-stats__label">评分</span>
+        <span class="cat-toy-stats__label">{{ 'sections.tb_product.rating' | t }}</span>
       </div>
     </div>
 
@@ -180,7 +180,7 @@
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22,4 12,14.01 9,11.01"></polyline>
         </svg>
-        <span>正品保障</span>
+        <span>{{ 'sections.tb_product.authentic' | t }}</span>
       </div>
       <div class="cat-toy-service">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -189,14 +189,7 @@
           <circle cx="5.5" cy="18.5" r="2.5"></circle>
           <circle cx="18.5" cy="18.5" r="2.5"></circle>
         </svg>
-        <span>全球包邮</span>
-      </div>
-      <div class="cat-toy-service">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        <span>30天退换</span>
+        <span>{{ 'sections.tb_product.free_shipping' | t }}</span>
       </div>
     </div>
 
@@ -301,9 +294,9 @@
             data-action="add-to-cart"
           >
             {% if current_variant.available %}
-              加入购物车
+              {{ 'sections.tb_product.add_to_cart' | t }}
             {% else %}
-              已售罄
+              {{ 'sections.tb_product.sold_out' | t }}
             {% endif %}
           </button>
         {%- endform -%}
@@ -821,6 +814,12 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // 翻译文本
+    const i18n = {
+      addedToCart: "{{ 'sections.tb_product.added_to_cart' | t }}",
+      addToCartError: "{{ 'sections.tb_product.add_to_cart_error' | t }}"
+    };
+
     // 版本信息 (按F12查看完整日志)
     const DEBUG = false; // 设置为true显示详细日志
 
@@ -998,18 +997,18 @@
       .then(response => {
         if (!response.ok) {
           return response.json().then(err => {
-            throw new Error(err.description || '添加失败');
+            throw new Error(err.description || i18n.addToCartError);
           });
         }
         return response.json();
       })
       .then(data => {
-        alert('已加入购物车！');
+        alert(i18n.addedToCart);
         window.location.href = '/cart';
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('加入购物车失败: ' + error.message);
+        alert(i18n.addToCartError + ': ' + error.message);
       });
     });
   });
@@ -1066,8 +1065,8 @@
   ],
   "presets": [
     {
-      "name": "淘宝风格产品页",
-      "category": "产品"
+      "name": "t:sections.tb_product.name",
+      "category": "t:sections.tb_product.category"
     }
   ]
 }

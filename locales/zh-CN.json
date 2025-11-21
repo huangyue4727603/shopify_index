@@ -317,6 +317,19 @@
           "label": "显示产品推荐"
         }
       }
+    },
+    "tb_product": {
+      "name": "TB产品页",
+      "sold": "已售",
+      "reviews": "评价",
+      "rating": "评分",
+      "hot_badge": "爆款热销",
+      "authentic": "正品保障",
+      "free_shipping": "全球包邮",
+      "add_to_cart": "加入购物车",
+      "sold_out": "已售罄",
+      "added_to_cart": "已加入购物车！",
+      "add_to_cart_error": "加入购物车失败"
     }
   }
 }

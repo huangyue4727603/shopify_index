@@ -335,6 +335,19 @@
           "label": "Show product recommendations"
         }
       }
+    },
+    "tb_product": {
+      "name": "TB Product Page",
+      "sold": "Sold",
+      "reviews": "Reviews",
+      "rating": "Rating",
+      "hot_badge": "Hot Sale",
+      "authentic": "Authentic",
+      "free_shipping": "Free Shipping",
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "added_to_cart": "Added to cart!",
+      "add_to_cart_error": "Failed to add to cart"
     }
   }
 }

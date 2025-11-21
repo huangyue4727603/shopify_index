@@ -985,6 +985,30 @@
           "label": "显示产品推荐"
         }
       }
+    },
+    "tb_product": {
+      "name": "TB产品页",
+      "category": "产品",
+      "settings": {
+        "title_prefix": {
+          "label": "标题前缀标签"
+        },
+        "price_label": {
+          "label": "价格标签"
+        },
+        "promo_tag": {
+          "label": "促销标签"
+        },
+        "promo_text": {
+          "label": "促销文案"
+        },
+        "review_count": {
+          "label": "评价数量"
+        },
+        "rating": {
+          "label": "评分"
+        }
+      }
     }
   }
 }
