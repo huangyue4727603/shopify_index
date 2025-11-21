@@ -6,9 +6,7 @@
 
 <section class="zodiac-test" data-color-scheme="{{ color_scheme }}">
   <div class="zodiac-test__background">
-    {% if section.settings.background_image %}
-      <img src="{{ section.settings.background_image | image_url: width: 1920 }}" alt="" loading="lazy">
-    {% endif %}
+    <img src="{{ 'zodiac-bg.jpg' | asset_url }}" alt="" loading="lazy">
   </div>
 
   <div class="zodiac-test__container">
@@ -21,11 +19,9 @@
           <button type="button" class="zodiac-test__button zodiac-test__button--primary" data-action="start">
             {{ section.settings.start_button_text }}
           </button>
-          {% if section.settings.welcome_decoration_image %}
-            <div class="zodiac-test__decoration">
-              <img src="{{ section.settings.welcome_decoration_image | image_url: width: 400 }}" alt="">
-            </div>
-          {% endif %}
+          <div class="zodiac-test__decoration">
+            <img src="{{ 'zodiac-兔.png' | asset_url }}" alt="生肖兔装饰">
+          </div>
         </div>
       </div>
 
@@ -90,11 +86,6 @@
       "default": "scheme-1"
     },
     {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "背景图片"
-    },
-    {
       "type": "header",
       "content": "欢迎页设置"
     },
@@ -115,11 +106,6 @@
       "id": "start_button_text",
       "label": "开始按钮文字",
       "default": "开始测试"
-    },
-    {
-      "type": "image_picker",
-      "id": "welcome_decoration_image",
-      "label": "装饰图片"
     },
     {
       "type": "header",
