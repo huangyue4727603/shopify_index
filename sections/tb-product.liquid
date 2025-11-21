@@ -133,13 +133,6 @@
   <div class="cat-toy-info">
     <!-- 价格区域 -->
     <div class="cat-toy-price-box">
-      <div class="cat-toy-price-label">
-        {%- if section.settings.price_label != blank -%}
-          {{ section.settings.price_label }}
-        {%- else -%}
-          {{ 'sections.tb_product.limited_offer_price' | t }}
-        {%- endif -%}
-      </div>
       <div class="cat-toy-price">
         <span class="cat-toy-price__currency">{{ cart.currency.symbol }}</span>
         <span class="cat-toy-price__amount">{{ current_variant.price | money_without_currency }}</span>
@@ -398,12 +391,6 @@
     margin-bottom: 12px;
   }
 
-  .cat-toy-price-label {
-    font-size: 12px;
-    color: var(--cat-toy-primary);
-    margin-bottom: 4px;
-  }
-
   .cat-toy-price {
     display: flex;
     align-items: baseline;
@@ -471,17 +458,6 @@
     color: var(--cat-toy-text);
     line-height: 1.4;
     margin: 0 0 12px;
-  }
-
-  .cat-toy-title__tag {
-    display: inline-block;
-    background: var(--cat-toy-primary);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 2px;
-    font-size: 12px;
-    margin-right: 6px;
-    vertical-align: middle;
   }
 
   /* 统计信息 */
@@ -1023,12 +999,6 @@
   "tag": "section",
   "class": "tb-product-section",
   "settings": [
-    {
-      "type": "text",
-      "id": "price_label",
-      "label": "t:sections.tb_product.settings.price_label.label",
-      "default": ""
-    },
     {
       "type": "text",
       "id": "promo_text",

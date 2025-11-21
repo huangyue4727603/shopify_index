@@ -990,9 +990,6 @@
       "name": "TB产品页",
       "category": "产品",
       "settings": {
-        "price_label": {
-          "label": "价格标签"
-        },
         "promo_text": {
           "label": "促销文案"
         },

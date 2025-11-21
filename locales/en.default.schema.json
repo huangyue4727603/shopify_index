@@ -1095,9 +1095,6 @@
       "name": "TB Product Page",
       "category": "Product",
       "settings": {
-        "price_label": {
-          "label": "Price label"
-        },
         "promo_text": {
           "label": "Promotion text"
         },
