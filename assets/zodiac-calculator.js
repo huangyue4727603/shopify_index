@@ -1,6 +1,4 @@
-import { Component } from '@theme'
-
-class ZodiacCalculator extends Component {
+class ZodiacCalculator extends HTMLElement {
   constructor() {
     super()
     this.currentScreen = 'welcome'
@@ -156,7 +154,7 @@ class ZodiacCalculator extends Component {
     }
   }
 
-  connected() {
+  connectedCallback() {
     this.setupEventListeners()
   }
 
@@ -234,9 +232,9 @@ class ZodiacCalculator extends Component {
     // 显示生肖图片
     const imageEl = this.querySelector('[data-zodiac-image]')
     if (imageEl) {
-      const imagePath = window.Shopify?.routes?.root
-        ? `${window.Shopify.routes.root}cdn/shop/files/${this.zodiacResult.image}`
-        : `/cdn/shop/files/${this.zodiacResult.image}`
+      // 使用asset_url方式获取图片路径
+      const assetUrl = window.Shopify?.routes?.root || '/'
+      const imagePath = `${assetUrl}cdn/shop/files/${this.zodiacResult.image}`
       imageEl.src = imagePath
       imageEl.alt = this.zodiacResult.name
     }
