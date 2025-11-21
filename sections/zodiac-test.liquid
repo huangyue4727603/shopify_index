@@ -73,6 +73,23 @@
   </div>
 </section>
 
+<script>
+  // 将生肖图片URL映射传递给JavaScript
+  window.zodiacImageUrls = {
+    '鼠': "{{ 'zodiac-鼠.png' | asset_url }}",
+    '牛': "{{ 'zodiac-牛.png' | asset_url }}",
+    '虎': "{{ 'zodiac-虎.png' | asset_url }}",
+    '兔': "{{ 'zodiac-兔.png' | asset_url }}",
+    '龙': "{{ 'zodiac-龙.png' | asset_url }}",
+    '蛇': "{{ 'zodiac-蛇.png' | asset_url }}",
+    '马': "{{ 'zodiac-马.png' | asset_url }}",
+    '羊': "{{ 'zodiac-羊.png' | asset_url }}",
+    '猴': "{{ 'zodiac-猴.png' | asset_url }}",
+    '鸡': "{{ 'zodiac-鸡.png' | asset_url }}",
+    '狗': "{{ 'zodiac-狗.png' | asset_url }}",
+    '猪': "{{ 'zodiac-猪.png' | asset_url }}"
+  };
+</script>
 <script src="{{ 'zodiac-calculator.js' | asset_url }}" defer></script>
 
 {% schema %}

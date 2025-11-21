@@ -232,11 +232,12 @@ class ZodiacCalculator extends HTMLElement {
     // 显示生肖图片
     const imageEl = this.querySelector('[data-zodiac-image]')
     if (imageEl) {
-      // 使用asset_url方式获取图片路径
-      const assetUrl = window.Shopify?.routes?.root || '/'
-      const imagePath = `${assetUrl}cdn/shop/files/${this.zodiacResult.image}`
-      imageEl.src = imagePath
-      imageEl.alt = this.zodiacResult.name
+      // 使用Liquid预生成的图片URL映射
+      const imagePath = window.zodiacImageUrls?.[this.zodiacResult.name]
+      if (imagePath) {
+        imageEl.src = imagePath
+        imageEl.alt = this.zodiacResult.name
+      }
     }
 
     // 显示详情
