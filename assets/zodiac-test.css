@@ -179,12 +179,25 @@
   border-radius: 4px;
   background: white;
   transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.zodiac-test__date-field:hover {
+  border-color: #5c4b41;
 }
 
 .zodiac-test__date-field:focus {
   outline: none;
   border-color: #5c4b41;
   box-shadow: 0 0 0 3px rgba(92, 75, 65, 0.1);
+}
+
+/* 确保日期输入框的日历图标始终可见 */
+.zodiac-test__date-field::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* 结果页 */
