@@ -71,22 +71,26 @@
 </section>
 
 <script>
+  // 当前语言
+  window.zodiacCurrentLocale = "{{ request.locale.iso_code }}";
+
   // 将生肖图片URL映射传递给JavaScript
   window.zodiacImageUrls = {
-    '鼠': "{{ 'zodiac-rat.png' | asset_url }}",
-    '牛': "{{ 'zodiac-ox.png' | asset_url }}",
-    '虎': "{{ 'zodiac-tiger.png' | asset_url }}",
-    '兔': "{{ 'zodiac-rabbit.png' | asset_url }}",
-    '龙': "{{ 'zodiac-dragon.png' | asset_url }}",
-    '蛇': "{{ 'zodiac-snake.png' | asset_url }}",
-    '马': "{{ 'zodiac-horse.png' | asset_url }}",
-    '羊': "{{ 'zodiac-goat.png' | asset_url }}",
-    '猴': "{{ 'zodiac-monkey.png' | asset_url }}",
-    '鸡': "{{ 'zodiac-rooster.png' | asset_url }}",
-    '狗': "{{ 'zodiac-dog.png' | asset_url }}",
-    '猪': "{{ 'zodiac-pig.png' | asset_url }}"
+    'rat': "{{ 'zodiac-rat.png' | asset_url }}",
+    'ox': "{{ 'zodiac-ox.png' | asset_url }}",
+    'tiger': "{{ 'zodiac-tiger.png' | asset_url }}",
+    'rabbit': "{{ 'zodiac-rabbit.png' | asset_url }}",
+    'dragon': "{{ 'zodiac-dragon.png' | asset_url }}",
+    'snake': "{{ 'zodiac-snake.png' | asset_url }}",
+    'horse': "{{ 'zodiac-horse.png' | asset_url }}",
+    'goat': "{{ 'zodiac-goat.png' | asset_url }}",
+    'monkey': "{{ 'zodiac-monkey.png' | asset_url }}",
+    'rooster': "{{ 'zodiac-rooster.png' | asset_url }}",
+    'dog': "{{ 'zodiac-dog.png' | asset_url }}",
+    'pig': "{{ 'zodiac-pig.png' | asset_url }}"
   };
 </script>
+<script src="{{ 'zodiac-calculator-i18n.js' | asset_url }}"></script>
 <script src="{{ 'zodiac-calculator.js' | asset_url }}" defer></script>
 
 {% schema %}
