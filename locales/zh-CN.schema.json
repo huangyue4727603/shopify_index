@@ -976,5 +976,15 @@
     "products": "产品",
     "other_sections": "其他",
     "storytelling": "故事讲述"
+  },
+  "sections": {
+    "zodiac_test": {
+      "name": "生肖测试",
+      "settings": {
+        "show_products": {
+          "label": "显示产品推荐"
+        }
+      }
+    }
   }
 }

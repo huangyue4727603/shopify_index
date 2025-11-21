@@ -299,5 +299,24 @@
       "success_moderated": "评论已发布，等待审核",
       "success": "评论已发布"
     }
+  },
+  "sections": {
+    "zodiac_test": {
+      "name": "生肖测试",
+      "welcome_title": "通过查询你的生日来了解你的前世，并测算出本年的运势！",
+      "welcome_subtitle": "仅需填写真实的出生日期即可生成属于你的专属星座运势指南",
+      "start_button": "开始测试",
+      "input_title": "输入你的出生日期",
+      "date_label": "选择日期",
+      "calculate_button": "开始测试",
+      "result_title_prefix": "你的前世是",
+      "details_title": "前世为龙人注意事项其与运势指南",
+      "restart_button": "重新测试",
+      "settings": {
+        "show_products": {
+          "label": "显示产品推荐"
+        }
+      }
+    }
   }
 }

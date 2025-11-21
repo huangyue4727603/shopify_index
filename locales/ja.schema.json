@@ -976,5 +976,15 @@
     "products": "商品",
     "other_sections": "その他",
     "storytelling": "ストーリーテリング"
+  },
+  "sections": {
+    "zodiac_test": {
+      "name": "干支占い",
+      "settings": {
+        "show_products": {
+          "label": "おすすめ商品を表示"
+        }
+      }
+    }
   }
 }

@@ -317,5 +317,24 @@
         }
       }
     }
+  },
+  "sections": {
+    "zodiac_test": {
+      "name": "Zodiac Test",
+      "welcome_title": "Discover your past life through your birthday and predict this year's fortune!",
+      "welcome_subtitle": "Simply enter your real birth date to generate your personalized zodiac fortune guide",
+      "start_button": "Start Test",
+      "input_title": "Enter Your Birth Date",
+      "date_label": "Select Date",
+      "calculate_button": "Start Test",
+      "result_title_prefix": "Your past life was ",
+      "details_title": "Zodiac Guide and Fortune Forecast",
+      "restart_button": "Try Again",
+      "settings": {
+        "show_products": {
+          "label": "Show product recommendations"
+        }
+      }
+    }
   }
 }

@@ -1081,5 +1081,15 @@
     "sign_up": "Sign up",
     "shop_our_latest_arrivals": "Shop our latest arrivals!",
     "welcome_to_our_store": "Welcome to our store"
+  },
+  "sections": {
+    "zodiac_test": {
+      "name": "Zodiac Test",
+      "settings": {
+        "show_products": {
+          "label": "Show product recommendations"
+        }
+      }
+    }
   }
 }
