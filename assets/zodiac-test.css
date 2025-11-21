@@ -1,0 +1,378 @@
+/* 生肖测试页面样式 */
+
+.zodiac-test {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 背景 */
+.zodiac-test__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.zodiac-test__background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.zodiac-test__background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 容器 */
+.zodiac-test__container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* 屏幕切换 */
+.zodiac-test__screen {
+  display: none;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.zodiac-test__screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 欢迎页 */
+.zodiac-test__welcome-content {
+  text-align: center;
+  color: white;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.zodiac-test__title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.zodiac-test__subtitle {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.zodiac-test__decoration {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.zodiac-test__decoration img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* 按钮 */
+.zodiac-test__button {
+  padding: 0.875rem 3rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+.zodiac-test__button--primary {
+  background: rgba(92, 75, 65, 0.9);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.zodiac-test__button--primary:hover {
+  background: rgba(92, 75, 65, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.zodiac-test__button--primary:disabled {
+  background: rgba(92, 75, 65, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.zodiac-test__button--secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #5c4b41;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.zodiac-test__button--secondary:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 输入页 */
+.zodiac-test__input-content {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.zodiac-test__input-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.zodiac-test__date-input {
+  margin-bottom: 2rem;
+}
+
+.zodiac-test__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.zodiac-test__date-field {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.zodiac-test__date-field:focus {
+  outline: none;
+  border-color: #5c4b41;
+  box-shadow: 0 0 0 3px rgba(92, 75, 65, 0.1);
+}
+
+/* 结果页 */
+.zodiac-test__result-content {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.zodiac-test__result-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.zodiac-test__result-title span {
+  font-size: clamp(2rem, 5vw, 3rem);
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.zodiac-test__result-image {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.zodiac-test__result-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 详情区域 */
+.zodiac-test__details {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.zodiac-test__details-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.zodiac-details__section {
+  margin-bottom: 2rem;
+}
+
+.zodiac-details__section:last-child {
+  margin-bottom: 0;
+}
+
+.zodiac-details__section h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #5c4b41;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0e6dc;
+}
+
+.zodiac-details__section p {
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+}
+
+.zodiac-details__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.zodiac-details__list li {
+  padding: 0.5rem 0;
+  color: #666;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.zodiac-details__list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #5c4b41;
+  font-weight: 600;
+}
+
+.zodiac-details__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.zodiac-details__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zodiac-details__label {
+  font-weight: 500;
+  color: #333;
+}
+
+.zodiac-details__value {
+  color: #666;
+}
+
+.zodiac-details__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.zodiac-details__tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #f0e6dc;
+  color: #5c4b41;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* 产品推荐 */
+.zodiac-test__products {
+  margin-top: 3rem;
+}
+
+.zodiac-test__products-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.zodiac-test__products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .zodiac-test__container {
+    padding: 1rem;
+  }
+
+  .zodiac-test__input-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .zodiac-test__details {
+    padding: 1.5rem;
+  }
+
+  .zodiac-test__button {
+    width: 100%;
+  }
+
+  .zodiac-details__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zodiac-test__products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .zodiac-test__decoration img {
+    max-width: 200px;
+  }
+
+  .zodiac-test__result-image {
+    padding: 1.5rem;
+  }
+}

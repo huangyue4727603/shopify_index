@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "zodiac_test_main": {
+      "type": "zodiac-test",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "welcome_title": "通过查询你的生日来了解你的前世，并测算出本年的运势！",
+        "welcome_subtitle": "仅需填写真实的出生日期即可生成属于你的专属星座运势指南",
+        "start_button_text": "开始测试",
+        "input_title": "输入你的出生日期",
+        "date_label": "选择日期",
+        "calculate_button_text": "开始测试",
+        "result_title_prefix": "你的前世是",
+        "details_title": "前世为龙人注意事项其与运势指南",
+        "restart_button_text": "重新测试",
+        "show_products": true,
+        "products_title_template": "{year}年属{zodiac}人的专属增强磁场推荐"
+      }
+    }
+  },
+  "order": [
+    "zodiac_test_main"
+  ]
+}

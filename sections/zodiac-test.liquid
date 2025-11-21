@@ -1,0 +1,188 @@
+{% liquid
+  assign color_scheme = section.settings.color_scheme
+%}
+
+<link rel="stylesheet" href="{{ 'zodiac-test.css' | asset_url }}">
+
+<section class="zodiac-test" data-color-scheme="{{ color_scheme }}">
+  <div class="zodiac-test__background">
+    {% if section.settings.background_image %}
+      <img src="{{ section.settings.background_image | image_url: width: 1920 }}" alt="" loading="lazy">
+    {% endif %}
+  </div>
+
+  <div class="zodiac-test__container">
+    <zodiac-calculator class="zodiac-test__calculator">
+      <!-- 初始状态：欢迎页 -->
+      <div class="zodiac-test__screen zodiac-test__screen--welcome active" data-screen="welcome">
+        <div class="zodiac-test__welcome-content">
+          <h1 class="zodiac-test__title">{{ section.settings.welcome_title }}</h1>
+          <p class="zodiac-test__subtitle">{{ section.settings.welcome_subtitle }}</p>
+          <button type="button" class="zodiac-test__button zodiac-test__button--primary" data-action="start">
+            {{ section.settings.start_button_text }}
+          </button>
+          {% if section.settings.welcome_decoration_image %}
+            <div class="zodiac-test__decoration">
+              <img src="{{ section.settings.welcome_decoration_image | image_url: width: 400 }}" alt="">
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 输入状态：日期选择 -->
+      <div class="zodiac-test__screen zodiac-test__screen--input" data-screen="input">
+        <div class="zodiac-test__input-content">
+          <h2 class="zodiac-test__input-title">{{ section.settings.input_title }}</h2>
+          <div class="zodiac-test__date-input">
+            <label class="zodiac-test__label">{{ section.settings.date_label }}</label>
+            <input type="date" class="zodiac-test__date-field" data-birth-date>
+          </div>
+          <button type="button" class="zodiac-test__button zodiac-test__button--primary" data-action="calculate" disabled>
+            {{ section.settings.calculate_button_text }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 结果状态：生肖展示 -->
+      <div class="zodiac-test__screen zodiac-test__screen--result" data-screen="result">
+        <div class="zodiac-test__result-content">
+          <h2 class="zodiac-test__result-title">{{ section.settings.result_title_prefix }}<span data-zodiac-name></span></h2>
+          <div class="zodiac-test__result-image">
+            <img data-zodiac-image src="" alt="">
+          </div>
+          <button type="button" class="zodiac-test__button zodiac-test__button--secondary" data-action="restart">
+            {{ section.settings.restart_button_text }}
+          </button>
+        </div>
+
+        <!-- 生肖详情区域 -->
+        <div class="zodiac-test__details">
+          <h3 class="zodiac-test__details-title">{{ section.settings.details_title }}</h3>
+          <div class="zodiac-test__details-content" data-zodiac-details>
+            <!-- JavaScript 动态填充 -->
+          </div>
+        </div>
+
+        <!-- 相关产品推荐 -->
+        {% if section.settings.show_products %}
+          <div class="zodiac-test__products">
+            <h3 class="zodiac-test__products-title" data-products-title></h3>
+            <div class="zodiac-test__products-grid" data-products-grid>
+              <!-- JavaScript 动态填充产品 -->
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </zodiac-calculator>
+  </div>
+</section>
+
+<script src="{{ 'zodiac-calculator.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "生肖测试",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景图片"
+    },
+    {
+      "type": "header",
+      "content": "欢迎页设置"
+    },
+    {
+      "type": "text",
+      "id": "welcome_title",
+      "label": "标题",
+      "default": "通过查询你的生日来了解你的前世，并测算出本年的运势！"
+    },
+    {
+      "type": "text",
+      "id": "welcome_subtitle",
+      "label": "副标题",
+      "default": "仅需填写真实的出生日期即可生成属于你的专属星座运势指南"
+    },
+    {
+      "type": "text",
+      "id": "start_button_text",
+      "label": "开始按钮文字",
+      "default": "开始测试"
+    },
+    {
+      "type": "image_picker",
+      "id": "welcome_decoration_image",
+      "label": "装饰图片"
+    },
+    {
+      "type": "header",
+      "content": "输入页设置"
+    },
+    {
+      "type": "text",
+      "id": "input_title",
+      "label": "标题",
+      "default": "输入你的出生日期"
+    },
+    {
+      "type": "text",
+      "id": "date_label",
+      "label": "日期标签",
+      "default": "选择日期"
+    },
+    {
+      "type": "text",
+      "id": "calculate_button_text",
+      "label": "计算按钮文字",
+      "default": "开始测试"
+    },
+    {
+      "type": "header",
+      "content": "结果页设置"
+    },
+    {
+      "type": "text",
+      "id": "result_title_prefix",
+      "label": "结果标题前缀",
+      "default": "你的前世是"
+    },
+    {
+      "type": "text",
+      "id": "details_title",
+      "label": "详情标题",
+      "default": "前世为龙人注意事项其与运势指南"
+    },
+    {
+      "type": "text",
+      "id": "restart_button_text",
+      "label": "重新测试按钮文字",
+      "default": "重新测试"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_products",
+      "label": "显示产品推荐",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "products_title_template",
+      "label": "产品推荐标题模板",
+      "default": "{year}年属{zodiac}人的专属增强磁场推荐",
+      "info": "使用 {year} 和 {zodiac} 作为占位符"
+    }
+  ],
+  "presets": [
+    {
+      "name": "生肖测试"
+    }
+  ]
+}
+{% endschema %}
