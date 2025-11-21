@@ -155,9 +155,6 @@
 
     <!-- 商品标题 -->
     <h1 class="cat-toy-title">
-      {%- if section.settings.title_prefix != blank -%}
-        <span class="cat-toy-title__tag">{{ section.settings.title_prefix }}</span>
-      {%- endif -%}
       {{ product.title }}
     </h1>
 
@@ -1028,20 +1025,8 @@
   "settings": [
     {
       "type": "text",
-      "id": "title_prefix",
-      "label": "t:sections.tb_product.settings.title_prefix.label",
-      "default": ""
-    },
-    {
-      "type": "text",
       "id": "price_label",
       "label": "t:sections.tb_product.settings.price_label.label",
-      "default": ""
-    },
-    {
-      "type": "text",
-      "id": "promo_tag",
-      "label": "t:sections.tb_product.settings.promo_tag.label",
       "default": ""
     },
     {
