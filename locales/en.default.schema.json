@@ -1095,9 +1095,6 @@
       "name": "TB Product Page",
       "category": "Product",
       "settings": {
-        "promo_text": {
-          "label": "Promotion text"
-        },
         "review_count": {
           "label": "Review count"
         },
