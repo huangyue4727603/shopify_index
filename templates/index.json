@@ -1042,7 +1042,7 @@
       ],
       "name": "Featured collection",
       "settings": {
-        "collection": "手串",
+        "collection": "新品上市",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 8,
