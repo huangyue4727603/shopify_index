@@ -1483,7 +1483,7 @@
       ],
       "name": "Featured collection",
       "settings": {
-        "collection": "新品上市",
+        "collection": "new-arrivals",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 8,
@@ -1587,7 +1587,7 @@
               "type": "button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/项链和吊坠",
+                "link": "shopify://collections/necklaces",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
